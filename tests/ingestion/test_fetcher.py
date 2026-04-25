@@ -31,11 +31,11 @@ def test_fetch_page_succeeds_on_second_attempt():
 
 @rsps_lib.activate
 def test_fetch_page_raises_pdf_skip_error_on_pdf_content_type():
-    rsps_lib.add(rsps_lib.GET, "https://example.com/report.pdf",
+    rsps_lib.add(rsps_lib.GET, "https://example.com/report",
                  body=b"%PDF-1.4 fake content",
                  content_type="application/pdf", status=200)
     with pytest.raises(PdfSkipError):
-        fetch_page("https://example.com/report.pdf")
+        fetch_page("https://example.com/report")
 
 
 @rsps_lib.activate
