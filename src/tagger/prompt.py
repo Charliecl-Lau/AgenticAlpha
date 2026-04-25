@@ -23,14 +23,14 @@ FEW-SHOT EXAMPLES:
 EXAMPLE 1 (CATL, perception stream):
 Article: "EU tariffs on Chinese EVs rose to 35%. CATL's Hungary Debrecen plant, now producing
 cells for BMW and Stellantis, reached 20 GWh annualised run-rate ahead of schedule."
-Correct tag: topic_cluster = "Capex_Execution", direction = "positive", geo_exposure = ["EU"]
+Correct tag: topic_cluster = "Capex_Execution", direction = "positive", sentiment_score = 7, geo_exposure = ["EU"], summary = "CATL's Debrecen plant reached 20 GWh annualised run-rate ahead of schedule."
 Wrong tag: topic_cluster = "Geopolitical_Noise"
 Reason: The primary event is the operational milestone (capacity ramp), not the tariff.
 
 EXAMPLE 2 (LGES, ground_truth stream):
 Article: "LGES reported Q1 2026 operating loss of KRW 207.8B. Excluding IRA AMPC subsidies
 of KRW 189.7B, the loss widens to KRW 397.5B."
-Correct tag: topic_cluster = "Subsidy_Dependence", direction = "negative", sentiment_score = 3
+Correct tag: topic_cluster = "Subsidy_Dependence", direction = "negative", sentiment_score = 3, geo_exposure = ["US"], summary = "LGES reported Q1 2026 operating loss of KRW 207.8B, widening to KRW 397.5B when IRA AMPC subsidies are excluded."
 Wrong tag: topic_cluster = "Other"
 Reason: The subsidy exclusion figure directly evidences policy-dependent profitability.
 

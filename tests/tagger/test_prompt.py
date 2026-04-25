@@ -46,3 +46,13 @@ def test_build_user_message_includes_markdown_content():
 def test_build_user_message_includes_stream_context():
     msg = build_user_message("Some IR text.", company="LGES", stream="ground_truth")
     assert "ground_truth" in msg or "Ground Truth" in msg
+
+
+def test_system_prompt_links_catl_to_organic_capex_and_lges_to_subsidy():
+    prompt = build_system_prompt()
+    # CATL must be associated with organic/capex clusters
+    catl_section = prompt[prompt.lower().find("catl"):]
+    assert "Organic_Scale_vs_Export" in catl_section or "Capex_Execution" in catl_section
+    # LGES must be associated with subsidy dependence
+    lges_section = prompt[prompt.lower().find("lges"):]
+    assert "Subsidy_Dependence" in lges_section
