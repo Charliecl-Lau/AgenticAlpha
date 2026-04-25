@@ -35,3 +35,37 @@ def test_extract_article_text_falls_back_to_body():
     html = "<html><body><p>Earnings summary here.</p></body></html>"
     text = extract_article_text(html)
     assert "Earnings summary here" in text
+
+
+def test_html_to_markdown_strips_header_and_aside():
+    html = (
+        "<html><header>Site header</header>"
+        "<aside>Sidebar</aside>"
+        "<article><p>Content here.</p></article></html>"
+    )
+    md = html_to_markdown(html)
+    assert "Content here" in md
+    assert "Site header" not in md
+    assert "Sidebar" not in md
+
+
+def test_html_to_markdown_strips_ad_selectors():
+    html = (
+        "<html><body>"
+        "<div class='advertisement'>Ad content</div>"
+        "<div class='cookie-notice'>Cookie banner</div>"
+        "<div class='banner-top'>Top banner</div>"
+        "<p>Real content.</p>"
+        "</body></html>"
+    )
+    md = html_to_markdown(html)
+    assert "Real content" in md
+    assert "Ad content" not in md
+    assert "Cookie banner" not in md
+    assert "Top banner" not in md
+
+
+def test_extract_article_text_falls_back_to_html_to_markdown_on_empty():
+    html = "<html></html>"
+    text = extract_article_text(html)
+    assert isinstance(text, str)

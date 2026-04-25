@@ -11,13 +11,18 @@ def _process_markdown(md: str) -> str:
     return md
 
 
-def html_to_markdown(html: str) -> str:
-    soup = BeautifulSoup(html, "html.parser")
+def _strip_boilerplate(soup: BeautifulSoup) -> None:
+    """Remove nav, footer, header, aside, script, style tags and ad/cookie/banner elements."""
     for tag in soup.find_all(["nav", "footer", "header", "aside", "script", "style"]):
         tag.decompose()
     for sel in [".ad", ".advertisement", "[class*='cookie']", "[class*='banner']"]:
         for el in soup.select(sel):
             el.decompose()
+
+
+def html_to_markdown(html: str) -> str:
+    soup = BeautifulSoup(html, "html.parser")
+    _strip_boilerplate(soup)
     md = markdownify.markdownify(str(soup), heading_style="ATX")
     md = _process_markdown(md)
     return md
@@ -25,11 +30,7 @@ def html_to_markdown(html: str) -> str:
 
 def extract_article_text(html: str) -> str:
     soup = BeautifulSoup(html, "html.parser")
-    for tag in soup.find_all(["nav", "footer", "header", "aside", "script", "style"]):
-        tag.decompose()
-    for sel in [".ad", ".advertisement", "[class*='cookie']", "[class*='banner']"]:
-        for el in soup.select(sel):
-            el.decompose()
+    _strip_boilerplate(soup)
     root = soup.find("article") or soup.find("main") or soup.find("body")
     if root is None:
         return html_to_markdown(html)
