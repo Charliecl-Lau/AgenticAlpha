@@ -17,7 +17,7 @@ def fetch_page(url: str, timeout: int = 30) -> str:
     if url.lower().endswith(".pdf"):
         raise PdfSkipError(f"PDF URL skipped (no PDF parser in stack): {url}")
 
-    last_exc: Exception | None = None
+    last_exc: Exception = RuntimeError(f"fetch failed for {url}")
     for attempt in range(_MAX_RETRIES):
         try:
             resp = requests.get(url, headers=_HEADERS, timeout=timeout)
@@ -36,4 +36,4 @@ def fetch_page(url: str, timeout: int = 30) -> str:
             sleep_secs = _BACKOFF_BASE * (2 ** attempt) + random.uniform(0, 0.5)
             time.sleep(sleep_secs)
 
-    raise last_exc  # type: ignore[misc]
+    raise last_exc

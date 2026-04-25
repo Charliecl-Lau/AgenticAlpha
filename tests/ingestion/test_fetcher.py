@@ -1,5 +1,6 @@
 import responses as rsps_lib
 import pytest
+from unittest.mock import patch
 from src.ingestion.fetcher import fetch_page, PdfSkipError
 
 
@@ -12,7 +13,8 @@ def test_fetch_page_returns_html_body():
 
 
 @rsps_lib.activate
-def test_fetch_page_raises_runtime_error_after_retries():
+@patch("src.ingestion.fetcher.time.sleep")
+def test_fetch_page_raises_runtime_error_after_retries(mock_sleep):
     # Register 3 consecutive 503s — all retries exhausted
     for _ in range(3):
         rsps_lib.add(rsps_lib.GET, "https://example.com/down", status=503)
@@ -21,7 +23,8 @@ def test_fetch_page_raises_runtime_error_after_retries():
 
 
 @rsps_lib.activate
-def test_fetch_page_succeeds_on_second_attempt():
+@patch("src.ingestion.fetcher.time.sleep")
+def test_fetch_page_succeeds_on_second_attempt(mock_sleep):
     rsps_lib.add(rsps_lib.GET, "https://example.com/flaky", status=503)
     rsps_lib.add(rsps_lib.GET, "https://example.com/flaky",
                  body="<html><body><p>Recovered.</p></body></html>", status=200)
