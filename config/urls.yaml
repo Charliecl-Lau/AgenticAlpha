@@ -1,0 +1,14 @@
+# config/urls.yaml
+# Replace placeholder URLs with real accessible article URLs.
+# Bloomberg/Moomoo paywalled pages: use cached/archive.org versions or exported text.
+# Ground truth: prefer HTML earnings release pages over PDF links (PDF not supported).
+perception:
+  - url: "https://www.bloomberg.com/news/articles/catl-example-url"
+    company: "CATL"
+  - url: "https://www.bloomberg.com/news/articles/lges-example-url"
+    company: "LGES"
+ground_truth:
+  - url: "https://www.catl.com/en/news/661.html"
+    company: "CATL"
+  - url: "https://www.lgensol.com/en/investor"
+    company: "LGES"
