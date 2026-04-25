@@ -27,7 +27,7 @@ def extract_article_text(html: str) -> str:
     soup = BeautifulSoup(html, "html.parser")
     for tag in soup.find_all(["nav", "footer", "header", "aside", "script", "style"]):
         tag.decompose()
-    for sel in [".ad", ".advertisement", "[class*='cookie']"]:
+    for sel in [".ad", ".advertisement", "[class*='cookie']", "[class*='banner']"]:
         for el in soup.select(sel):
             el.decompose()
     root = soup.find("article") or soup.find("main") or soup.find("body")
