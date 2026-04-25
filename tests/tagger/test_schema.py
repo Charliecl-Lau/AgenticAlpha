@@ -48,3 +48,25 @@ def test_tag_serialises_to_dict():
     d = tag.model_dump()
     assert d["direction"] == "negative"
     assert d["topic_cluster"] == "Subsidy_Dependence"
+
+
+def test_tag_rejects_sentiment_score_zero():
+    with pytest.raises(ValidationError):
+        Tag(
+            sentiment_score=0,
+            direction=Direction.neutral,
+            topic_cluster=TopicCluster.Other,
+            geo_exposure=[],
+            summary="Some summary.",
+        )
+
+
+def test_tag_rejects_whitespace_only_summary():
+    with pytest.raises(ValidationError):
+        Tag(
+            sentiment_score=5,
+            direction=Direction.neutral,
+            topic_cluster=TopicCluster.Other,
+            geo_exposure=[],
+            summary="   ",
+        )
