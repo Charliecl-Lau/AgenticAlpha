@@ -36,7 +36,7 @@ def run_batch(
                 result["source_file"] = md_file.name
                 result["stream"] = stream
                 result["company"] = meta["company"]
-                out_file = out / f"{md_file.stem}.json"
+                out_file = out / f"{stream}_{md_file.stem}.json"
                 out_file.write_text(json.dumps(result, indent=2), encoding="utf-8")
                 cluster_counts[result["topic_cluster"]] += 1
                 processed += 1
