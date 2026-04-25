@@ -1,6 +1,5 @@
 # tests/ingestion/test_pipeline.py
 import json
-import random
 from pathlib import Path
 from unittest.mock import patch
 from src.ingestion.pipeline import run_ingestion
@@ -31,7 +30,7 @@ def test_run_ingestion_skips_failed_urls_and_continues(tmp_path):
         ground_truth=[],
     )
 
-    def fake_fetch(url, **kwargs):
+    def fake_fetch(url):
         if "fail" in url:
             raise RuntimeError("HTTP 403")
         return _FAKE_HTML
@@ -62,7 +61,7 @@ def test_run_ingestion_writes_manifest(tmp_path):
         ground_truth=[],
     )
 
-    def fake_fetch(url, **kwargs):
+    def fake_fetch(url):
         if "fail" in url:
             raise RuntimeError("HTTP 403")
         return _FAKE_HTML
@@ -87,3 +86,13 @@ def test_run_ingestion_includes_source_url_in_output(tmp_path):
         run_ingestion(config, output_dir=str(tmp_path))
     content = list((tmp_path / "perception").glob("*.md"))[0].read_text()
     assert "https://bloomberg.com/catl-123" in content
+
+
+def test_run_ingestion_handles_empty_streams(tmp_path):
+    config = UrlConfig(perception=[], ground_truth=[])
+    with patch("src.ingestion.pipeline.random_delay"):
+        run_ingestion(config, output_dir=str(tmp_path))
+    manifest = json.loads((tmp_path / "ingestion_manifest.json").read_text())
+    assert manifest["total"] == 0
+    assert manifest["succeeded"] == 0
+    assert manifest["failed"] == 0
