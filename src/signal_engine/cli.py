@@ -6,7 +6,6 @@ from src.signal_engine.aggregator import compute_topic_counts, compute_sentiment
 from src.signal_engine.charts import build_divergence_matrix, build_trend_inflection
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
 
 def run_signal_engine(tags_dir: str, output_dir: str) -> None:
@@ -29,6 +28,7 @@ def run_signal_engine(tags_dir: str, output_dir: str) -> None:
 
 
 def main() -> None:
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     parser = argparse.ArgumentParser(description="Generate signal charts from tagged data")
     parser.add_argument("--tags", default="data/processed/tags")
     parser.add_argument("--output", default="output/charts")
