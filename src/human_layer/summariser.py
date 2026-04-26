@@ -2,6 +2,11 @@ import pandas as pd
 
 
 def extract_top_signals(df: pd.DataFrame, n: int = 3) -> dict[str, list[dict]]:
+    """Return the top-N signals per company, weighted by stream.
+
+    Ground-truth stream rows are scored at 2× their sentiment_score.
+    Assumes sentiment_score is always positive (tagger enforces 1–10).
+    """
     result: dict[str, list[dict]] = {}
     for company in df["company"].unique():
         sub = df[df["company"] == company].copy()

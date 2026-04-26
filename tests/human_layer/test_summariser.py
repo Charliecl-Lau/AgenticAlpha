@@ -22,7 +22,7 @@ def test_extract_top_signals_returns_top_3_per_company():
     signals = extract_top_signals(df, n=3)
     assert "CATL" in signals
     assert "LGES" in signals
-    assert len(signals["CATL"]) <= 3
+    assert len(signals["CATL"]) == 3   # fixture has exactly 3 CATL rows
     assert len(signals["LGES"]) <= 3
 
 
@@ -41,6 +41,8 @@ def test_extract_top_signals_includes_summary_and_topic():
     top_catl = signals["CATL"][0]
     assert "summary" in top_catl
     assert "topic_cluster" in top_catl
+    assert "sentiment_score" in top_catl
+    assert "stream" in top_catl
 
 
 def test_extract_top_signals_output_does_not_expose_weighted_score():
