@@ -51,7 +51,7 @@ def test_deck_input_carries_chart_paths():
     assert result.trend_inflection_path == _INFLECTION_PATH
 
 
-def test_deck_input_is_json_serialisable(tmp_path):
+def test_deck_input_is_json_serialisable():
     result = merge_inputs(_human_inputs(), _tag_df(), _DIVERGENCE_PATH, _INFLECTION_PATH)
     json_str = json.dumps(result.to_dict())
     parsed = json.loads(json_str)

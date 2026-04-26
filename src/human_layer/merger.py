@@ -6,6 +6,10 @@ from src.human_layer.summariser import extract_top_signals
 
 @dataclass
 class DeckInput:
+    """Single source of truth consumed by the Stage 5 deck renderer.
+
+    Call to_dict() to get a JSON-serialisable payload.
+    """
     human: HumanInputs
     ai_signals: dict[str, list[dict]]
     divergence_matrix_path: str
@@ -27,6 +31,7 @@ def merge_inputs(
     trend_inflection_path: str,
     top_n: int = 3,
 ) -> DeckInput:
+    """Package validated human inputs, top-N AI signals, and chart paths into a DeckInput for Stage 5."""
     ai_signals = extract_top_signals(tag_df, n=top_n)
     return DeckInput(
         human=human,
