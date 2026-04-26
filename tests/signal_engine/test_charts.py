@@ -66,4 +66,4 @@ def test_build_trend_inflection_returns_plotly_figure():
 
 def test_build_trend_inflection_y_axis_bounded_0_to_10():
     fig = build_trend_inflection(_trend_df())
-    assert fig.layout.yaxis.range == (0, 10)
+    assert list(fig.layout.yaxis.range) == [0, 10]
