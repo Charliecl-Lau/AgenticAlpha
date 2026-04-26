@@ -52,9 +52,9 @@ def build_slide_specs(deck_input: DeckInput) -> list[SlideSpec]:
         slide_type=SlideType.CHART,
         title="Quality Divergence Matrix: Narrative Evidence",
         body=(
-            "Normalized topic coverage share per company (perception stream). "
-            f"Human-verified: CATL overseas gross margin {h.catl_overseas_gross_margin_pct:.1f}% "
-            f"vs domestic {h.catl_domestic_gross_margin_pct:.1f}% — consistent with Organic_Scale perception weight."
+            "AI signals show stronger positive perception of CATL execution topics. "
+            f"Human analysis confirms higher overseas margins ({h.catl_overseas_gross_margin_pct:.1f}%) "
+            "and faster ramp execution."
         ),
         chart_path=deck_input.divergence_matrix_path,
     ))
@@ -64,9 +64,9 @@ def build_slide_specs(deck_input: DeckInput) -> list[SlideSpec]:
         slide_type=SlideType.CHART,
         title="Sentiment Divergence by Topic",
         body=(
-            "Mean sentiment score (1–10) per topic cluster, grouped by company. "
-            f"Human-verified: LGES ex-IRA operating margin {h.lges_q1_operating_margin_ex_ira_pct:.1f}% "
-            "— consistent with Subsidy_Dependence low-sentiment signal."
+            "AI identifies a clear signal divergence on execution vs subsidy themes. "
+            f"Human-verified: LGES ex-IRA operating margin weakness ({h.lges_q1_operating_margin_ex_ira_pct:.1f}%) "
+            "corroborates the negative sentiment cluster around Subsidy_Dependence."
         ),
         chart_path=deck_input.trend_inflection_path,
     ))
@@ -109,15 +109,14 @@ def build_slide_specs(deck_input: DeckInput) -> list[SlideSpec]:
         ),
     ))
 
-    # Slides 9-14: Fundamentals (placeholder for analyst expansion)
-    for i in range(6):
-        specs.append(SlideSpec(
-            slide_type=SlideType.FUNDAMENTALS,
-            title=f"Fundamental Analysis {i + 1}",
-            body="[Analyst-populated slide — insert DCF assumptions, capex schedules, or channel check data here.]",
-        ))
+    # Slide 9: Fundamentals placeholder
+    specs.append(SlideSpec(
+        slide_type=SlideType.FUNDAMENTALS,
+        title="Fundamental Analysis: Market Share & Capacity",
+        body="[Analyst-populated slide — insert DCF assumptions, capex schedules, or channel check data here.]",
+    ))
 
-    # Slides 15-18: Counterfactuals
+    # Counterfactuals: 1 real + 1 placeholder
     specs.append(SlideSpec(
         slide_type=SlideType.COUNTERFACTUAL,
         title="Downside Scenario: IRA Credit Cap",
@@ -127,12 +126,11 @@ def build_slide_specs(deck_input: DeckInput) -> list[SlideSpec]:
             "CATL exposure: limited — organic margin not IRA-derived."
         ),
     ))
-    for i in range(3):
-        specs.append(SlideSpec(
-            slide_type=SlideType.COUNTERFACTUAL,
-            title=f"Counterfactual Scenario {i + 2}",
-            body="[Analyst-populated — insert specific basis-point impact tied to named risk scenario.]",
-        ))
+    specs.append(SlideSpec(
+        slide_type=SlideType.COUNTERFACTUAL,
+        title="Counterfactual Scenario 2",
+        body="[Analyst-populated — insert specific basis-point impact tied to named risk scenario.]",
+    ))
 
     # Slides 19-20: Disclosures
     specs.append(SlideSpec(
