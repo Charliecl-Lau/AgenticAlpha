@@ -65,7 +65,7 @@ def load_human_inputs(path: str) -> HumanInputs:
     p = Path(path)
     if not p.exists():
         raise FileNotFoundError(f"Human inputs config not found: {path}")
-    with open(p) as f:
+    with open(p, encoding="utf-8") as f:
         data = yaml.safe_load(f)
     if not isinstance(data, dict):
         raise ValueError(f"Human inputs config is empty or malformed: {path}")
