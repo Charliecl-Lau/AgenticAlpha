@@ -1,7 +1,5 @@
 # tests/renderer/test_cli.py
-import json
-from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from src.renderer.cli import run_renderer
 from src.human_layer.merger import DeckInput
 from src.human_layer.schema import HumanInputs
