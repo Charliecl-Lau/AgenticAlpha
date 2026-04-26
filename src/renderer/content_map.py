@@ -53,8 +53,7 @@ def build_slide_specs(deck_input: DeckInput) -> list[SlideSpec]:
         title="Quality Divergence Matrix: Narrative Evidence",
         body=(
             "AI signals show stronger positive perception of CATL execution topics. "
-            f"Human analysis confirms higher overseas margins ({h.catl_overseas_gross_margin_pct:.1f}%) "
-            "and faster ramp execution."
+            f"Human analysis confirms higher overseas margins ({h.catl_overseas_gross_margin_pct:.1f}%)."
         ),
         chart_path=deck_input.divergence_matrix_path,
     ))
@@ -132,7 +131,7 @@ def build_slide_specs(deck_input: DeckInput) -> list[SlideSpec]:
         body="[Analyst-populated — insert specific basis-point impact tied to named risk scenario.]",
     ))
 
-    # Slides 19-20: Disclosures
+    # Slides 12-13: Disclosures
     specs.append(SlideSpec(
         slide_type=SlideType.DISCLOSURE,
         title="AI Methodology Disclosure",

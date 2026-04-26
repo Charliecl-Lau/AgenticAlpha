@@ -104,8 +104,9 @@ def test_prohibited_language_check_catches_analyst_passthrough():
 def test_build_slide_specs_reduces_filler():
     specs = build_slide_specs(_deck_input())
     # Should be around 12-14 slides now, definitely less than 20
-    assert len(specs) < 16
+    assert 12 <= len(specs) < 16
 
     # Check that Slide 3 has the strong narrative body
+    assert specs[2].slide_type == SlideType.CHART
     assert "AI signals show stronger positive perception of CATL execution topics" in specs[2].body
     assert "Human analysis confirms higher overseas margins" in specs[2].body
