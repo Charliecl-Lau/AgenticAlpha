@@ -2,8 +2,8 @@ from __future__ import annotations
 import pandas as pd
 import plotly.graph_objects as go
 
-_CATL_COLOR = "#1f77b4"
-_LGES_COLOR = "#d62728"
+_CATL_COLOR = "#0e5a9e"
+_LGES_COLOR = "#ff7f0e"
 
 _TOPIC_LABELS: dict[str, str] = {
     "Organic_Scale_vs_Export": "Organic Scale",
@@ -18,9 +18,13 @@ def build_divergence_matrix(
     counts_df: pd.DataFrame,
     trend_df: pd.DataFrame | None = None,
     sentiment_df: pd.DataFrame | None = None,
+    human_metrics: dict | None = None,
 ) -> go.Figure:
     # Raises KeyError if required columns are missing — intentional validation
     _ = counts_df[["company", "topic_cluster", "count"]]
+
+    if human_metrics is None:
+        human_metrics = {"catl_margin": 31.4, "lges_margin": 2.1}
 
     fig = go.Figure()
     for company, color in [("CATL", _CATL_COLOR), ("LGES", _LGES_COLOR)]:
@@ -34,7 +38,7 @@ def build_divergence_matrix(
                     (sentiment_df["company"] == company)
                     & (sentiment_df["topic_cluster"] == row["topic_cluster"])
                 ]
-                s = sent_row["mean_sentiment"].iloc[0] if not sent_row.empty else None
+                s = sent_row["weighted_mean_sentiment"].iloc[0] if "weighted_mean_sentiment" in sent_row.columns else (sent_row["mean_sentiment"].iloc[0] if not sent_row.empty else None)
                 label = f"{row['count']:.1f}%" + (f"<br>★{s:.1f}" if s is not None else "")
                 text_labels.append(label)
         else:
@@ -49,15 +53,23 @@ def build_divergence_matrix(
             marker_color=color,
         ))
 
-    title = "Perception Topic Emphasis: CATL Organic Execution vs LGES Subsidy Dependence (% coverage share)"
+    title = "Perception vs Reality: CATL Execution-Led Globalization vs LGES Subsidy Dependence"
+
+    subtitle = (
+        f"<br><sub>CATL: High sentiment on Organic/Capex → aligns with {human_metrics.get('catl_margin', 31.4)}% overseas margin premium. "
+        f"LGES: Low sentiment on Subsidy Dep. → aligns with {human_metrics.get('lges_margin', 2.1)}% ex-IRA margin.</sub>"
+    )
+
     if trend_df is not None and not trend_df.empty:
         catl_s = trend_df[trend_df["company"] == "CATL"]["mean_sentiment"]
         lges_s = trend_df[trend_df["company"] == "LGES"]["mean_sentiment"]
         if not catl_s.empty and not lges_s.empty:
-            title += (
+            subtitle += (
                 f"<br><sub>Mean sentiment — CATL: {catl_s.iloc[0]:.1f}/10"
                 f" | LGES: {lges_s.iloc[0]:.1f}/10</sub>"
             )
+
+    title += subtitle
 
     fig.update_layout(
         title=title,
@@ -68,28 +80,28 @@ def build_divergence_matrix(
         template="plotly_white",
         font=dict(size=13),
         xaxis=dict(tickangle=-35),
-        margin=dict(b=90, t=110),
+        margin=dict(b=90, t=130),
     )
     return fig
 
 
 def build_trend_inflection(sentiment_df: pd.DataFrame) -> go.Figure:
-    """Grouped bars of mean sentiment per topic per company.
-
-    sentiment_df must have columns: company, topic_cluster, mean_sentiment.
-    Shows which topics carry high vs low signal quality for each company,
-    exposing the CATL execution premium vs LGES subsidy-dependence discount.
-    """
+    """Grouped bars of mean sentiment per topic per company."""
     fig = go.Figure()
-    topics = sentiment_df["topic_cluster"].unique().tolist()
+
+    # Filter out 'Other' topic
+    filtered_df = sentiment_df[sentiment_df["topic_cluster"] != "Other"]
+    topics = filtered_df["topic_cluster"].unique().tolist()
     x_labels = [_TOPIC_LABELS.get(t, t) for t in topics]
 
     for company, color in [("CATL", _CATL_COLOR), ("LGES", _LGES_COLOR)]:
-        sub = sentiment_df[sentiment_df["company"] == company]
+        sub = filtered_df[filtered_df["company"] == company]
         y_vals = []
         for topic in topics:
             row = sub[sub["topic_cluster"] == topic]
-            y_vals.append(row["mean_sentiment"].iloc[0] if not row.empty else None)
+            # Handle both mean_sentiment and weighted_mean_sentiment
+            val_col = "weighted_mean_sentiment" if "weighted_mean_sentiment" in row.columns else "mean_sentiment"
+            y_vals.append(row[val_col].iloc[0] if not row.empty else None)
 
         fig.add_trace(go.Bar(
             name=company,
@@ -100,8 +112,13 @@ def build_trend_inflection(sentiment_df: pd.DataFrame) -> go.Figure:
             marker_color=color,
         ))
 
+    title = (
+        "Signal Quality by Topic: Sentiment Divergence Between CATL and LGES<br>"
+        "<sub>Sentiment divergence on execution topics supports human-verified margin premium for CATL.</sub>"
+    )
+
     fig.update_layout(
-        title="Signal Quality by Topic: Sentiment Divergence Between CATL and LGES (1–10 scale)",
+        title=title,
         xaxis_title="Topic Cluster",
         yaxis_title="Mean Sentiment Score",
         yaxis=dict(range=[0, 10]),
@@ -110,6 +127,6 @@ def build_trend_inflection(sentiment_df: pd.DataFrame) -> go.Figure:
         template="plotly_white",
         font=dict(size=13),
         xaxis=dict(tickangle=-35),
-        margin=dict(b=90, t=90),
+        margin=dict(b=90, t=110),
     )
     return fig

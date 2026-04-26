@@ -49,15 +49,18 @@ def test_build_divergence_matrix_has_data_labels():
 
 
 def test_build_divergence_matrix_adds_sentiment_subtitle_when_trend_provided():
-    fig = build_divergence_matrix(_counts_df(), trend_df=_trend_df())
+    fig = build_divergence_matrix(_counts_df(), trend_df=_trend_df(), human_metrics={"catl_margin": 31.4, "lges_margin": 2.1})
     title_text = fig.layout.title.text
     # Both sentiment scores must appear in the title subtitle
     assert "7.4" in title_text
     assert "4.1" in title_text
+    # Check human metrics
+    assert "31.4%" in title_text
+    assert "2.1%" in title_text
 
 
 def test_build_divergence_matrix_no_subtitle_without_trend():
-    fig = build_divergence_matrix(_counts_df())
+    fig = build_divergence_matrix(_counts_df(), human_metrics={"catl_margin": 31.4, "lges_margin": 2.1})
     title_text = fig.layout.title.text
     assert "Mean sentiment" not in title_text
 
@@ -95,3 +98,18 @@ def test_build_trend_inflection_has_both_companies():
 def test_build_trend_inflection_uses_grouped_bars():
     fig = build_trend_inflection(_sentiment_df())
     assert fig.layout.barmode == "group"
+
+
+def test_build_trend_inflection_filters_other_topic():
+    df = _sentiment_df()
+    # Add an "Other" topic
+    df = pd.concat([df, pd.DataFrame([{"company": "CATL", "topic_cluster": "Other", "mean_sentiment": 5.0}])])
+    fig = build_trend_inflection(df)
+    all_text = fig.to_json()
+    assert "Other" not in all_text
+
+
+def test_build_trend_inflection_has_human_narrative_subtitle():
+    fig = build_trend_inflection(_sentiment_df())
+    title_text = fig.layout.title.text
+    assert "Sentiment divergence on execution topics supports human-verified margin premium" in title_text
