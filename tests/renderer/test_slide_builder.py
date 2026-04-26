@@ -1,6 +1,5 @@
 import pytest
 from pathlib import Path
-from unittest.mock import MagicMock, patch, call
 from src.renderer.slide_builder import build_pptx
 from src.renderer.content_map import SlideSpec, SlideType
 
@@ -40,3 +39,4 @@ def test_build_pptx_with_table_spec(tmp_path):
     build_pptx(specs, str(out))
     prs = Presentation(str(out))
     assert len(prs.slides) == 1
+    assert any(shape.has_table for shape in prs.slides[0].shapes)

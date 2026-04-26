@@ -1,8 +1,11 @@
+import logging
 from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from src.renderer.content_map import SlideSpec, SlideType
+
+logger = logging.getLogger(__name__)
 
 _SLIDE_W = Inches(13.33)
 _SLIDE_H = Inches(7.5)
@@ -11,8 +14,8 @@ _DARK = RGBColor(0x22, 0x22, 0x22)
 
 
 def _add_textbox(slide, left, top, width, height, text, font_size=18, bold=False, color=None):
-    txBox = slide.shapes.add_textbox(left, top, width, height)
-    tf = txBox.text_frame
+    tx_box = slide.shapes.add_textbox(left, top, width, height)
+    tf = tx_box.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
     run = p.add_run()
@@ -20,7 +23,7 @@ def _add_textbox(slide, left, top, width, height, text, font_size=18, bold=False
     run.font.size = Pt(font_size)
     run.font.bold = bold
     run.font.color.rgb = color or _DARK
-    return txBox
+    return tx_box
 
 
 def _render_title_slide(slide, spec: SlideSpec) -> None:
@@ -43,12 +46,22 @@ def _render_content_slide(slide, spec: SlideSpec) -> None:
                 cell = table.cell(r_idx, c_idx)
                 cell.text = cell_text
                 cell.text_frame.paragraphs[0].runs[0].font.bold = (r_idx == 0)
+    elif spec.chart_path:
+        # Chart slides: embed image first, then caption below
+        if Path(spec.chart_path).exists():
+            slide.shapes.add_picture(spec.chart_path, Inches(0.5), Inches(1.2),
+                                     Inches(12), Inches(4.8))
+            if spec.body:
+                _add_textbox(slide, Inches(0.5), Inches(6.1), Inches(12), Inches(1.0),
+                             spec.body, font_size=12)
+        else:
+            logger.warning("Chart file not found, skipping embed: %s", spec.chart_path)
+            if spec.body:
+                _add_textbox(slide, Inches(0.5), Inches(1.3), Inches(12), Inches(5.5),
+                             spec.body, font_size=16)
     elif spec.body:
         _add_textbox(slide, Inches(0.5), Inches(1.3), Inches(12), Inches(5.5),
                      spec.body, font_size=16)
-    if spec.chart_path and Path(spec.chart_path).exists():
-        slide.shapes.add_picture(spec.chart_path, Inches(0.5), Inches(1.5),
-                                 Inches(12), Inches(5.5))
 
 
 def build_pptx(specs: list[SlideSpec], output_path: str) -> None:
