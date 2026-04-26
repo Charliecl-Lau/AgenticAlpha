@@ -2,22 +2,33 @@ import argparse
 import logging
 from pathlib import Path
 from src.signal_engine.loader import load_tags
-from src.signal_engine.aggregator import compute_topic_counts, compute_sentiment_trend, compute_topic_sentiment
+from src.signal_engine.aggregator import compute_topic_counts, compute_sentiment_trend, compute_weighted_sentiment
 from src.signal_engine.charts import build_divergence_matrix, build_trend_inflection
+from src.human_layer.schema import load_human_inputs
 
 logger = logging.getLogger(__name__)
 
 
-def run_signal_engine(tags_dir: str, output_dir: str) -> None:
+def run_signal_engine(tags_dir: str, output_dir: str, human_inputs_path: str = "config/human_inputs.yaml") -> None:
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
 
     df = load_tags(tags_dir)
     counts = compute_topic_counts(df, stream="perception", normalize=True)
     trend = compute_sentiment_trend(df, stream="perception")
-    sentiment = compute_topic_sentiment(df)
+    sentiment = compute_weighted_sentiment(df)
 
-    divergence_fig = build_divergence_matrix(counts, trend_df=trend, sentiment_df=sentiment)
+    try:
+        human_data = load_human_inputs(human_inputs_path)
+        human_metrics = {
+            "catl_margin": human_data.catl_overseas_gross_margin_pct,
+            "lges_margin": human_data.lges_q1_operating_margin_ex_ira_pct
+        }
+    except Exception as e:
+        logger.warning("Could not load human inputs, using defaults. Error: %s", e)
+        human_metrics = {"catl_margin": 31.4, "lges_margin": 2.1}
+
+    divergence_fig = build_divergence_matrix(counts, trend_df=trend, sentiment_df=sentiment, human_metrics=human_metrics)
     inflection_fig = build_trend_inflection(sentiment)
 
     divergence_path = str(out / "quality_divergence_matrix.png")
@@ -33,8 +44,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate signal charts from tagged data")
     parser.add_argument("--tags", default="data/processed/tags")
     parser.add_argument("--output", default="output/charts")
+    parser.add_argument("--human-inputs", default="config/human_inputs.yaml")
     args = parser.parse_args()
-    run_signal_engine(tags_dir=args.tags, output_dir=args.output)
+    run_signal_engine(tags_dir=args.tags, output_dir=args.output, human_inputs_path=args.human_inputs)
     print(f"Charts written to {args.output}/")
 
 
