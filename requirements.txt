@@ -7,9 +7,9 @@ pyyaml==6.0.1
 anthropic==0.28.0
 pandas==2.2.2
 plotly==5.22.0
-kaleido==0.2.1
+kaleido==0.1.0post1
 python-pptx==0.6.23
 pytest==8.2.0
 pytest-mock==3.14.0
 responses==0.25.3
-google-generativeai==0.8.3
+google-genai>=1.0.0
