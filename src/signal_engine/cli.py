@@ -2,7 +2,7 @@ import argparse
 import logging
 from pathlib import Path
 from src.signal_engine.loader import load_tags
-from src.signal_engine.aggregator import compute_topic_counts, compute_sentiment_trend
+from src.signal_engine.aggregator import compute_topic_counts, compute_sentiment_trend, compute_topic_sentiment
 from src.signal_engine.charts import build_divergence_matrix, build_trend_inflection
 
 logger = logging.getLogger(__name__)
@@ -15,9 +15,10 @@ def run_signal_engine(tags_dir: str, output_dir: str) -> None:
     df = load_tags(tags_dir)
     counts = compute_topic_counts(df, stream="perception", normalize=True)
     trend = compute_sentiment_trend(df, stream="perception")
+    sentiment = compute_topic_sentiment(df)
 
-    divergence_fig = build_divergence_matrix(counts, trend_df=trend)
-    inflection_fig = build_trend_inflection(trend)
+    divergence_fig = build_divergence_matrix(counts, trend_df=trend, sentiment_df=sentiment)
+    inflection_fig = build_trend_inflection(sentiment)
 
     divergence_path = str(out / "quality_divergence_matrix.png")
     inflection_path = str(out / "trend_inflection.png")

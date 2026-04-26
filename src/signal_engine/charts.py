@@ -17,6 +17,7 @@ _TOPIC_LABELS: dict[str, str] = {
 def build_divergence_matrix(
     counts_df: pd.DataFrame,
     trend_df: pd.DataFrame | None = None,
+    sentiment_df: pd.DataFrame | None = None,
 ) -> go.Figure:
     # Raises KeyError if required columns are missing — intentional validation
     _ = counts_df[["company", "topic_cluster", "count"]]
@@ -25,16 +26,30 @@ def build_divergence_matrix(
     for company, color in [("CATL", _CATL_COLOR), ("LGES", _LGES_COLOR)]:
         sub = counts_df[counts_df["company"] == company]
         x_labels = [_TOPIC_LABELS.get(t, t) for t in sub["topic_cluster"]]
+
+        if sentiment_df is not None and not sentiment_df.empty:
+            text_labels = []
+            for _, row in sub.iterrows():
+                sent_row = sentiment_df[
+                    (sentiment_df["company"] == company)
+                    & (sentiment_df["topic_cluster"] == row["topic_cluster"])
+                ]
+                s = sent_row["mean_sentiment"].iloc[0] if not sent_row.empty else None
+                label = f"{row['count']:.1f}%" + (f"<br>★{s:.1f}" if s is not None else "")
+                text_labels.append(label)
+        else:
+            text_labels = [f"{v:.1f}" for v in sub["count"]]
+
         fig.add_trace(go.Bar(
             name=company,
             x=x_labels,
             y=sub["count"],
-            text=[f"{v:.1f}" for v in sub["count"]],
+            text=text_labels,
             textposition="outside",
             marker_color=color,
         ))
 
-    title = "Quality Divergence Matrix: Topic Coverage Share by Company (%)"
+    title = "Perception Topic Emphasis: CATL Organic Execution vs LGES Subsidy Dependence (% coverage share)"
     if trend_df is not None and not trend_df.empty:
         catl_s = trend_df[trend_df["company"] == "CATL"]["mean_sentiment"]
         lges_s = trend_df[trend_df["company"] == "LGES"]["mean_sentiment"]
@@ -53,28 +68,48 @@ def build_divergence_matrix(
         template="plotly_white",
         font=dict(size=13),
         xaxis=dict(tickangle=-35),
-        margin=dict(b=90, t=90),
+        margin=dict(b=90, t=110),
     )
     return fig
 
 
-def build_trend_inflection(trend_df: pd.DataFrame) -> go.Figure:
+def build_trend_inflection(sentiment_df: pd.DataFrame) -> go.Figure:
+    """Grouped bars of mean sentiment per topic per company.
+
+    sentiment_df must have columns: company, topic_cluster, mean_sentiment.
+    Shows which topics carry high vs low signal quality for each company,
+    exposing the CATL execution premium vs LGES subsidy-dependence discount.
+    """
     fig = go.Figure()
-    colors = {"CATL": _CATL_COLOR, "LGES": _LGES_COLOR}
-    fig.add_trace(go.Bar(
-        x=trend_df["company"].tolist(),
-        y=trend_df["mean_sentiment"].tolist(),
-        text=[f"{v:.1f}" for v in trend_df["mean_sentiment"]],
-        textposition="outside",
-        marker_color=[colors.get(c, "grey") for c in trend_df["company"]],
-    ))
+    topics = sentiment_df["topic_cluster"].unique().tolist()
+    x_labels = [_TOPIC_LABELS.get(t, t) for t in topics]
+
+    for company, color in [("CATL", _CATL_COLOR), ("LGES", _LGES_COLOR)]:
+        sub = sentiment_df[sentiment_df["company"] == company]
+        y_vals = []
+        for topic in topics:
+            row = sub[sub["topic_cluster"] == topic]
+            y_vals.append(row["mean_sentiment"].iloc[0] if not row.empty else None)
+
+        fig.add_trace(go.Bar(
+            name=company,
+            x=x_labels,
+            y=y_vals,
+            text=[f"{v:.1f}" if v is not None else "" for v in y_vals],
+            textposition="outside",
+            marker_color=color,
+        ))
 
     fig.update_layout(
-        title="Mean Perception Sentiment by Company (1–10 scale)",
+        title="Signal Quality by Topic: Sentiment Divergence Between CATL and LGES (1–10 scale)",
+        xaxis_title="Topic Cluster",
         yaxis_title="Mean Sentiment Score",
         yaxis=dict(range=[0, 10]),
+        barmode="group",
+        legend_title="Company",
         template="plotly_white",
         font=dict(size=13),
-        showlegend=False,
+        xaxis=dict(tickangle=-35),
+        margin=dict(b=90, t=90),
     )
     return fig

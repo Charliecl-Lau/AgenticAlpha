@@ -41,8 +41,9 @@ def test_run_signal_engine_passes_trend_to_divergence_matrix(tmp_path):
     dummy_fig = MagicMock(spec=go.Figure)
     captured_kwargs: dict = {}
 
-    def capture_divergence(counts_df, trend_df=None):
+    def capture_divergence(counts_df, trend_df=None, sentiment_df=None):
         captured_kwargs["trend_df"] = trend_df
+        captured_kwargs["sentiment_df"] = sentiment_df
         return dummy_fig
 
     with patch("src.signal_engine.cli.build_divergence_matrix", side_effect=capture_divergence), \
@@ -51,3 +52,5 @@ def test_run_signal_engine_passes_trend_to_divergence_matrix(tmp_path):
 
     assert captured_kwargs["trend_df"] is not None
     assert len(captured_kwargs["trend_df"]) > 0
+    assert captured_kwargs["sentiment_df"] is not None
+    assert len(captured_kwargs["sentiment_df"]) > 0

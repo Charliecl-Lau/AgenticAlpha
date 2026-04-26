@@ -21,6 +21,15 @@ def _trend_df():
     ])
 
 
+def _sentiment_df():
+    return pd.DataFrame([
+        {"company": "CATL", "topic_cluster": "Organic_Scale_vs_Export", "mean_sentiment": 9.0},
+        {"company": "CATL", "topic_cluster": "Subsidy_Dependence", "mean_sentiment": 7.0},
+        {"company": "LGES", "topic_cluster": "Organic_Scale_vs_Export", "mean_sentiment": 5.0},
+        {"company": "LGES", "topic_cluster": "Subsidy_Dependence", "mean_sentiment": 3.0},
+    ])
+
+
 def test_build_divergence_matrix_returns_plotly_figure():
     fig = build_divergence_matrix(_counts_df())
     assert isinstance(fig, go.Figure)
@@ -59,11 +68,30 @@ def test_build_divergence_matrix_raises_on_missing_columns():
         build_divergence_matrix(bad_df)
 
 
+def test_build_divergence_matrix_annotates_bars_with_sentiment_when_provided():
+    fig = build_divergence_matrix(_counts_df(), sentiment_df=_sentiment_df())
+    all_text = " ".join(
+        str(t) for trace in fig.data for t in (trace.text or [])
+    )
+    assert "★" in all_text
+
+
 def test_build_trend_inflection_returns_plotly_figure():
-    fig = build_trend_inflection(_trend_df())
+    fig = build_trend_inflection(_sentiment_df())
     assert isinstance(fig, go.Figure)
 
 
 def test_build_trend_inflection_y_axis_bounded_0_to_10():
-    fig = build_trend_inflection(_trend_df())
+    fig = build_trend_inflection(_sentiment_df())
     assert list(fig.layout.yaxis.range) == [0, 10]
+
+
+def test_build_trend_inflection_has_both_companies():
+    fig = build_trend_inflection(_sentiment_df())
+    assert "CATL" in fig.to_json()
+    assert "LGES" in fig.to_json()
+
+
+def test_build_trend_inflection_uses_grouped_bars():
+    fig = build_trend_inflection(_sentiment_df())
+    assert fig.layout.barmode == "group"

@@ -1,7 +1,7 @@
 # tests/signal_engine/test_aggregator.py
 import pandas as pd
 import pytest
-from src.signal_engine.aggregator import compute_topic_counts, compute_sentiment_trend
+from src.signal_engine.aggregator import compute_topic_counts, compute_sentiment_trend, compute_topic_sentiment, compute_weighted_sentiment
 
 
 def _make_df():
@@ -65,3 +65,50 @@ def test_compute_sentiment_trend_empty_stream_returns_empty():
     df = _make_df()
     trend = compute_sentiment_trend(df, stream="ground_truth")
     assert len(trend) == 0
+
+
+def test_compute_topic_sentiment_returns_mean_per_company_and_topic():
+    df = _make_df()
+    result = compute_topic_sentiment(df)
+    catl_row = result[(result["company"] == "CATL") & (result["topic_cluster"] == "Organic_Scale_vs_Export")]
+    assert abs(catl_row["mean_sentiment"].iloc[0] - 7.5) < 0.01
+    lges_row = result[(result["company"] == "LGES") & (result["topic_cluster"] == "Subsidy_Dependence")]
+    assert abs(lges_row["mean_sentiment"].iloc[0] - 3.5) < 0.01
+
+
+def test_compute_topic_sentiment_includes_all_streams():
+    df = _make_df().copy()
+    df.loc[0, "stream"] = "ground_truth"
+    result = compute_topic_sentiment(df)
+    # ground_truth row should still be included (no stream filter)
+    catl_row = result[(result["company"] == "CATL") & (result["topic_cluster"] == "Organic_Scale_vs_Export")]
+    assert len(catl_row) == 1
+
+
+def test_compute_topic_sentiment_empty_returns_empty():
+    result = compute_topic_sentiment(pd.DataFrame())
+    assert len(result) == 0
+
+
+def test_compute_weighted_sentiment_boosts_ground_truth():
+    df = pd.DataFrame([
+        {"company": "CATL", "stream": "perception", "topic_cluster": "Organic_Scale_vs_Export", "sentiment_score": 6},
+        {"company": "CATL", "stream": "ground_truth", "topic_cluster": "Organic_Scale_vs_Export", "sentiment_score": 9},
+    ])
+    result = compute_weighted_sentiment(df)
+    row = result[(result["company"] == "CATL") & (result["topic_cluster"] == "Organic_Scale_vs_Export")]
+    # weighted: (6*1 + 9*2) / (1+2) = 24/3 = 8.0
+    assert abs(row["weighted_mean_sentiment"].iloc[0] - 8.0) < 0.01
+
+
+def test_compute_weighted_sentiment_equals_mean_when_all_same_stream():
+    df = _make_df()  # all perception
+    result = compute_weighted_sentiment(df)
+    catl_row = result[(result["company"] == "CATL") & (result["topic_cluster"] == "Organic_Scale_vs_Export")]
+    # (8+7)/2 = 7.5
+    assert abs(catl_row["weighted_mean_sentiment"].iloc[0] - 7.5) < 0.01
+
+
+def test_compute_weighted_sentiment_empty_returns_empty():
+    result = compute_weighted_sentiment(pd.DataFrame())
+    assert len(result) == 0

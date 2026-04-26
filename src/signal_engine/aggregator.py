@@ -29,3 +29,33 @@ def compute_sentiment_trend(df: pd.DataFrame, stream: str) -> pd.DataFrame:
         .rename(columns={"sentiment_score": "mean_sentiment"})
     )
     return trend
+
+
+def compute_topic_sentiment(df: pd.DataFrame) -> pd.DataFrame:
+    """Mean sentiment per company per topic across all streams."""
+    if df.empty:
+        return pd.DataFrame(columns=["company", "topic_cluster", "mean_sentiment"])
+    result = (
+        df.groupby(["company", "topic_cluster"])["sentiment_score"]
+        .mean()
+        .round(1)
+        .reset_index()
+        .rename(columns={"sentiment_score": "mean_sentiment"})
+    )
+    return result
+
+
+def compute_weighted_sentiment(df: pd.DataFrame) -> pd.DataFrame:
+    """Mean sentiment per company per topic, weighting ground_truth 2× over perception."""
+    if df.empty:
+        return pd.DataFrame(columns=["company", "topic_cluster", "weighted_mean_sentiment"])
+    d = df.copy()
+    d["_weight"] = d["stream"].map(lambda s: 2 if s == "ground_truth" else 1)
+    d["_weighted"] = d["sentiment_score"] * d["_weight"]
+    agg = (
+        d.groupby(["company", "topic_cluster"])
+        .agg(_ws=("_weighted", "sum"), _w=("_weight", "sum"))
+        .reset_index()
+    )
+    agg["weighted_mean_sentiment"] = (agg["_ws"] / agg["_w"]).round(1)
+    return agg[["company", "topic_cluster", "weighted_mean_sentiment"]]
