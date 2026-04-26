@@ -79,6 +79,17 @@ def test_build_divergence_matrix_annotates_bars_with_sentiment_when_provided():
     assert "★" in all_text
 
 
+def test_build_divergence_matrix_sentiment_lookup_miss_shows_count_only():
+    # sentiment_df only covers CATL — LGES topics have no matching rows
+    partial_sentiment = pd.DataFrame([
+        {"company": "CATL", "topic_cluster": "Organic_Scale_vs_Export", "mean_sentiment": 9.0},
+    ])
+    fig = build_divergence_matrix(_counts_df(), sentiment_df=partial_sentiment)
+    # Should not raise; LGES bars fall back to count-only label
+    lges_trace = next(t for t in fig.data if t.name == "LGES")
+    assert all("★" not in str(label) for label in lges_trace.text)
+
+
 def test_build_trend_inflection_returns_plotly_figure():
     fig = build_trend_inflection(_sentiment_df())
     assert isinstance(fig, go.Figure)

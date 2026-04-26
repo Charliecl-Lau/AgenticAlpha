@@ -10,7 +10,6 @@ _TOPIC_LABELS: dict[str, str] = {
     "Subsidy_Dependence": "Subsidy Dep.",
     "Geopolitical_Noise": "Geo. Noise",
     "Capex_Execution": "Capex Exec.",
-    "Other": "Other",
 }
 
 
@@ -38,7 +37,11 @@ def build_divergence_matrix(
                     (sentiment_df["company"] == company)
                     & (sentiment_df["topic_cluster"] == row["topic_cluster"])
                 ]
-                s = sent_row["weighted_mean_sentiment"].iloc[0] if "weighted_mean_sentiment" in sent_row.columns else (sent_row["mean_sentiment"].iloc[0] if not sent_row.empty else None)
+                if not sent_row.empty:
+                    col = "weighted_mean_sentiment" if "weighted_mean_sentiment" in sent_row.columns else "mean_sentiment"
+                    s = sent_row[col].iloc[0]
+                else:
+                    s = None
                 label = f"{row['count']:.1f}%" + (f"<br>★{s:.1f}" if s is not None else "")
                 text_labels.append(label)
         else:
