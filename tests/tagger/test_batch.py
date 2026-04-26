@@ -7,9 +7,20 @@ from src.tagger.schema import Tag, Direction, TopicCluster, GeoRegion
 _TAG = Tag(
     sentiment_score=6,
     direction=Direction.neutral,
+    confidence=0.7,
     topic_cluster=TopicCluster.Capex_Execution,
     geo_exposure=[GeoRegion.China],
-    summary="CATL announced a 20 GWh expansion in Sichuan province.",
+    globalization_model="export-led",
+    localization_score=7,
+    subsidy_dependency=2,
+    execution_quality=7,
+    margin_signal=6,
+    capex_signal=8,
+    ROIC_signal=6,
+    contradiction_flag=False,
+    contradiction_reason=None,
+    claim_summary="CATL announced a 20 GWh expansion in Sichuan province.",
+    key_quote=None,
 )
 
 

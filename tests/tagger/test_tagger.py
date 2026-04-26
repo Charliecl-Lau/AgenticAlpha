@@ -7,9 +7,20 @@ from src.tagger.schema import Tag, Direction, TopicCluster, GeoRegion
 _VALID_JSON = json.dumps({
     "sentiment_score": 8,
     "direction": "positive",
+    "confidence": 0.9,
     "topic_cluster": "Organic_Scale_vs_Export",
     "geo_exposure": ["EU"],
-    "summary": "CATL's Hungary plant reached 50 GWh annual capacity in Q3 2024.",
+    "globalization_model": "export-led",
+    "localization_score": 8,
+    "subsidy_dependency": 2,
+    "execution_quality": 9,
+    "margin_signal": 7,
+    "capex_signal": 9,
+    "ROIC_signal": 8,
+    "contradiction_flag": False,
+    "contradiction_reason": None,
+    "claim_summary": "CATL's Hungary plant reached 50 GWh annual capacity in Q3 2024.",
+    "key_quote": None,
 })
 
 _FENCED_JSON = f"```json\n{_VALID_JSON}\n```"
