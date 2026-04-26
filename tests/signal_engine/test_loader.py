@@ -43,3 +43,10 @@ def test_load_tags_skips_malformed_json(tmp_path):
 def test_load_tags_raises_on_empty_directory(tmp_path):
     with pytest.raises(ValueError, match="No tag files"):
         load_tags(str(tmp_path))
+
+
+def test_load_tags_raises_on_all_malformed(tmp_path):
+    (tmp_path / "bad1.json").write_text("{not valid")
+    (tmp_path / "bad2.json").write_text("{also bad")
+    with pytest.raises(ValueError, match="malformed"):
+        load_tags(str(tmp_path))

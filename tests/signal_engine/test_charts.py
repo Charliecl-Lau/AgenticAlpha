@@ -28,7 +28,7 @@ def test_build_divergence_matrix_returns_plotly_figure():
 
 def test_build_divergence_matrix_has_both_companies_in_data():
     fig = build_divergence_matrix(_counts_df())
-    all_text = str(fig.to_json())
+    all_text = fig.to_json()
     assert "CATL" in all_text
     assert "LGES" in all_text
 

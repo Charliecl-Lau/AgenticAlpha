@@ -61,17 +61,13 @@ def build_divergence_matrix(
 def build_trend_inflection(trend_df: pd.DataFrame) -> go.Figure:
     fig = go.Figure()
     colors = {"CATL": _CATL_COLOR, "LGES": _LGES_COLOR}
-    for _, row in trend_df.iterrows():
-        company = row["company"]
-        score = row["mean_sentiment"]
-        fig.add_trace(go.Bar(
-            name=company,
-            x=[company],
-            y=[score],
-            text=[f"{score:.1f}"],
-            textposition="outside",
-            marker_color=colors.get(company, "grey"),
-        ))
+    fig.add_trace(go.Bar(
+        x=trend_df["company"].tolist(),
+        y=trend_df["mean_sentiment"].tolist(),
+        text=[f"{v:.1f}" for v in trend_df["mean_sentiment"]],
+        textposition="outside",
+        marker_color=[colors.get(c, "grey") for c in trend_df["company"]],
+    ))
 
     fig.update_layout(
         title="Mean Perception Sentiment by Company (1–10 scale)",
