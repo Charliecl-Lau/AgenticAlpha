@@ -74,9 +74,12 @@ def build_slide_specs(deck_input: DeckInput) -> list[SlideSpec]:
     # Slides 5-6: Top AI Signals per company
     for company in ["CATL", "LGES"]:
         signals = ai.get(company, [])
-        bullets = "\n".join(
-            f"• [{s['topic_cluster']}] {s['summary']}" for s in signals[:3]
-        )
+        if signals:
+            bullets = "\n".join(
+                f"• [{s['topic_cluster']}] {s['summary']}" for s in signals[:3]
+            )
+        else:
+            bullets = "[No signals available for this company]"
         specs.append(SlideSpec(
             slide_type=SlideType.AI_SIGNAL,
             title=f"Top Perception Signals: {company}",
