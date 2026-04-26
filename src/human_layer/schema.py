@@ -1,5 +1,5 @@
 from pathlib import Path
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 import yaml
 
 _PLACEHOLDERS = {"tbd", "todo", "fill in", "fill me", "placeholder", "n/a", "?"}
@@ -14,6 +14,8 @@ def _reject_placeholder(v: str, field_name: str) -> str:
 
 
 class HumanInputs(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     catl_overseas_gross_margin_pct: float
     catl_domestic_gross_margin_pct: float
     lges_q1_operating_margin_ex_ira_pct: float
@@ -65,4 +67,6 @@ def load_human_inputs(path: str) -> HumanInputs:
         raise FileNotFoundError(f"Human inputs config not found: {path}")
     with open(p) as f:
         data = yaml.safe_load(f)
+    if not isinstance(data, dict):
+        raise ValueError(f"Human inputs config is empty or malformed: {path}")
     return HumanInputs(**data)
