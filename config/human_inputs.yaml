@@ -1,0 +1,12 @@
+# config/human_inputs.yaml
+# HUMAN ANALYST: Fill in all fields with real data. Empty or placeholder values will cause the pipeline to fail.
+
+catl_overseas_gross_margin_pct: 31.4        # CATL reported overseas gross margin (Q3 2024)
+catl_domestic_gross_margin_pct: 24.0        # CATL domestic gross margin (Q3 2024)
+lges_q1_operating_margin_ex_ira_pct: 2.1   # LGES Q1 operating margin EXCLUDING IRA credits
+
+roic_shock_delta_bps: 180
+shock_scenario: "US EV demand contracts 20% YoY; IRA credits capped at current 2024 levels for the duration of the model horizon."
+
+catl_execution_edge: "CATL Hungary gigafactory reached 50 GWh annualised run-rate 6 months ahead of schedule with no announced cost overruns."
+lges_execution_risk: "Ultium Cells JV Line 2 delayed 9 months; management disclosed incremental costs of ~$340M in the Q2 2024 earnings call."
