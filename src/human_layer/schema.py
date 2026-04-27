@@ -24,6 +24,14 @@ class HumanInputs(BaseModel):
     catl_execution_edge: str
     lges_execution_risk: str
 
+    # Analyst action layer
+    why_now_takeaway: str
+    why_now_followup: str
+    differentiation_takeaway: str
+    differentiation_followup: str
+    contradiction_takeaway: str
+    contradiction_followup: str
+
     @field_validator("catl_overseas_gross_margin_pct", "catl_domestic_gross_margin_pct")
     @classmethod
     def gross_margin_in_range(cls, v: float) -> float:
@@ -59,6 +67,36 @@ class HumanInputs(BaseModel):
     @classmethod
     def lges_risk_not_placeholder(cls, v: str) -> str:
         return _reject_placeholder(v, "lges_execution_risk")
+
+    @field_validator("why_now_takeaway")
+    @classmethod
+    def why_now_takeaway_not_placeholder(cls, v: str) -> str:
+        return _reject_placeholder(v, "why_now_takeaway")
+
+    @field_validator("why_now_followup")
+    @classmethod
+    def why_now_followup_not_placeholder(cls, v: str) -> str:
+        return _reject_placeholder(v, "why_now_followup")
+
+    @field_validator("differentiation_takeaway")
+    @classmethod
+    def differentiation_takeaway_not_placeholder(cls, v: str) -> str:
+        return _reject_placeholder(v, "differentiation_takeaway")
+
+    @field_validator("differentiation_followup")
+    @classmethod
+    def differentiation_followup_not_placeholder(cls, v: str) -> str:
+        return _reject_placeholder(v, "differentiation_followup")
+
+    @field_validator("contradiction_takeaway")
+    @classmethod
+    def contradiction_takeaway_not_placeholder(cls, v: str) -> str:
+        return _reject_placeholder(v, "contradiction_takeaway")
+
+    @field_validator("contradiction_followup")
+    @classmethod
+    def contradiction_followup_not_placeholder(cls, v: str) -> str:
+        return _reject_placeholder(v, "contradiction_followup")
 
 
 def load_human_inputs(path: str) -> HumanInputs:
