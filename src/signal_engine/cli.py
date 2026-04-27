@@ -55,7 +55,7 @@ def run_signal_engine(tags_dir: str, output_dir: str, human_inputs_path: str = "
     import os as _os
 
     diff_df = compute_differentiation_matrix(df)
-    build_differentiation_matrix_chart(diff_df, _os.path.join(output_dir, "differentiation_matrix.png"))
+    build_differentiation_matrix_chart(diff_df, _os.path.join(output_dir, "differentiation_matrix.png"), human_metrics=human_metrics)
 
     timeline_df = compute_timeline(df)
     build_why_now_timeline_chart(timeline_df, _os.path.join(output_dir, "why_now_timeline.png"))

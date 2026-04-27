@@ -17,5 +17,5 @@ def extract_top_signals(df: pd.DataFrame, n: int = 3) -> dict[str, list[dict]]:
             axis=1,
         )
         top = sub.sort_values("_weighted_score", ascending=False).head(n)
-        result[company] = top[["topic_cluster", "sentiment_score", "summary", "stream"]].to_dict("records")
+        result[company] = top[["topic_cluster", "sentiment_score", "claim_summary", "stream"]].to_dict("records")
     return result

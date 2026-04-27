@@ -59,6 +59,11 @@ def run_batch(
     for stream, dir_value in input_dirs.items():
         for dir_path in _iter_dirs(dir_value):
             for md_file in sorted(dir_path.glob("*.md")):
+                out_file = out / f"{stream}_{md_file.stem}.json"
+                if out_file.exists():
+                    logger.info("Skipping %s (already tagged)", md_file.name)
+                    skipped += 1
+                    continue
                 text = md_file.read_text(encoding="utf-8")
                 meta = _parse_header(text)
                 try:
@@ -69,7 +74,6 @@ def run_batch(
                     result["source_file"] = md_file.name
                     result["source_weight"] = source_weight_for_stream(stream)
                     result["date"] = parse_frontmatter_date(text)
-                    out_file = out / f"{stream}_{md_file.stem}.json"
                     out_file.write_text(json.dumps(result, indent=2), encoding="utf-8")
                     cluster_counts[result["topic_cluster"]] += 1
                     processed += 1

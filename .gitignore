@@ -1,0 +1,31 @@
+# Secrets
+.env
+
+# Generated data — ingestion, tagging, synthesis outputs
+data/raw/
+data/processed/
+
+# Generated outputs — charts, deck, briefing
+output/
+
+# Claude Code config
+.claude/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db

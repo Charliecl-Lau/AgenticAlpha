@@ -62,6 +62,185 @@ perception:
   - url: "https://www.morganstanley.com/ideas/electric-vehicle-battery-market-trends"
     company: "LGES"
 
+  # CATL — Additional media coverage (globalization, financials, sodium-ion)
+  - url: "https://www.cnbc.com/2025/06/27/china-battery-giant-catl-is-expanding-globally-heres-why-it-matters.html"
+    company: "CATL"
+    # CNBC: China battery giant CATL is expanding globally — why it matters (Jun 2025)
+  - url: "https://cnevpost.com/2024/05/22/catl-makes-overseas-expansion-top-priority/"
+    company: "CATL"
+    # CnEVPost: CATL makes overseas expansion top priority (May 2024)
+  - url: "https://www.ess-news.com/2025/08/01/catl-h1-profit-soars-33-as-energy-storage-and-overseas-expansion-get-results/"
+    company: "CATL"
+    # ESS News: CATL H1 profit soars 33% on energy storage and overseas expansion (Aug 2025)
+  - url: "https://carnewschina.com/2026/03/10/catl-reports-record-breaking-financial-results-in-2025-with-10-billion-usd-net-profit/"
+    company: "CATL"
+    # CarNewsChina: CATL record-breaking 2025 results, $10B net profit (Mar 2026)
+  - url: "https://kr-asia.com/catls-business-is-broadening-but-ev-batteries-still-drive-profit"
+    company: "CATL"
+    # KrASIA: CATL business broadening but EV batteries still drive profit
+  - url: "https://www.carnewschina.com/2026/04/22/catl-to-mass-produce-sodium-ion-batteries-in-2026-targeting-600-km-range-in-the-future/"
+    company: "CATL"
+    # CarNewsChina: CATL to mass-produce sodium-ion batteries in 2026 (Apr 2026)
+  - url: "https://cnevpost.com/2025/09/08/catl-hungarian-plant-begin-production-early-2026/"
+    company: "CATL"
+    # CnEVPost: CATL Hungarian plant expected to begin production by early 2026 (Sep 2025)
+  - url: "https://www.reuters.com/business/autos-transportation/chinese-battery-maker-catl-expects-hungarian-production-start-by-early-2026-2025-09-07/"
+    company: "CATL"
+    # Reuters: CATL Hungary ramp timing and Europe localization (Sep 2025)
+  - url: "https://www.chinadaily.com.cn/a/202512/04/WS6930e65aa310d6866eb2cd3f.html"
+    company: "CATL"
+    # China Daily: CATL Hungary battery plant ready to launch, capacity fully booked (Dec 2025)
+  - url: "https://www.morningstar.com/news/dow-jones/2026030911148/battery-maker-catl-reports-earnings-beat-despite-cooling-ev-demand-high"
+    company: "CATL"
+    # Morningstar: CATL 2025 earnings beat and overseas/energy-storage mix commentary (Mar 2026)
+  - url: "https://www.ad-hoc-news.de/boerse/news/ueberblick/catl-strengthens-market-leadership-with-record-profits-and-strategic/68691943"
+    company: "CATL"
+    # Ad-hoc-news: CATL record profits and strategic overseas expansion analysis
+  - url: "https://battery-tech.net/how-catls-2025-financial-record-and-chemistry-strategy-could-reshape-the-global-battery-market/"
+    company: "CATL"
+    # Battery-tech.net: CATL 2025 financial record and chemistry strategy analysis
+  - url: "https://cnevpost.com/2026/04/07/global-ev-battery-market-share-jan-feb-2026/"
+    company: "CATL"
+    # CnEVPost: CATL global EV battery market share Jan-Feb 2026 (Apr 2026)
+  - url: "https://finance.yahoo.com/news/chinese-battery-maker-catl-expects-162533245.html"
+    company: "CATL"
+    # Yahoo Finance: Reuters syndicated CATL Hungary production timing story
+  - url: "https://www.reuters.com/world/asia-pacific/chinas-catl-beats-estimates-profit-growth-quickens-2026-03-09/"
+    company: "CATL"
+    # Reuters: CATL beats estimates with strong 2025 profit growth and overseas performance (Mar 2026)
+  - url: "https://www.ainvest.com/news/catl-strategic-expansion-hungary-implications-global-ev-supply-chains-2509/"
+    company: "CATL"
+    new: true
+    # AInvest: CATL Hungary €7.3B plant: 100 GWh capacity for 1M EVs/year, localization strategy and EU market access
+  - url: "https://autotechinsight.spglobal.com/news/5283936/catl-plans-to-begin-production-operations-at-its-plant-in-hungary-by-early-2026"
+    company: "CATL"
+    new: true
+    # S&P Global AutoTech: CATL Debrecen plant ramp for major OEMs, capacity and investment details
+  - url: "https://www.fdiintelligence.com/content/163c2f30-cd66-4317-9fdf-13c1828a6e22"
+    company: "CATL"
+    new: true
+    # FDI Intelligence: CATL Debrecen gigafactory as top European mega project, localization impacts
+  - url: "https://bbj.hu/business/industry/manufacturing/debrecen-plant-will-play-key-role-in-catls-european-expansion/"
+    company: "CATL"
+    new: true
+    # Budapest Business Journal: CATL Debrecen role in European integration, local manufacturing strategy
+  - url: "https://technode.com/2025/09/08/catls-e7-3-billion-hungary-plant-to-begin-production-early-next-year/"
+    company: "CATL"
+    new: true
+    # TechNode: CATL €7.3B Hungary super plant ramp ahead of schedule, European OEM supply
+  - url: "https://www.debrecensun.hu/local/2025/12/04/catl-to-launch-battery-cell-production-in-debrecen-as-its-european-expansion-accelerates/"
+    company: "CATL"
+    new: true
+    # Debrecen Sun: CATL cell production launch in Hungary, 40 GWh initial capacity fully booked
+  - url: "https://www.reuters.com/world/asia-pacific/chinas-catl-posts-slower-profit-growth-first-quarter-2026-04-15/"
+    company: "CATL"
+    new: true
+    # Reuters: CATL Q1 2026 earnings beat, 42.1% global share expansion, ESS growth
+  - url: "https://www.wsj.com/business/earnings/catl-reports-earnings-beat-despite-cooling-ev-demand-higher-metal-prices-1b8472cf"
+    company: "CATL"
+    new: true
+    # WSJ: CATL 2025 earnings beat, overseas sales and ESS offsetting China EV slowdown
+  - url: "https://newlinesmag.com/reportage/chinas-massive-investment-in-hungary-is-lucrative-but-toxic/"
+    company: "CATL"
+    new: true
+    # New Lines Mag: China's Hungary investments including CATL Debrecen plant, localization vs export tensions 2025-2026
+  - url: "https://www.batteriesinternational.com/news/catl-readies-hungary-battery-cell-plant-for-production/"
+    company: "CATL"
+    new: true
+    # Batteries International: CATL Hungary Debrecen 40 GWh plant fully booked, Q1 2026 production start with 1500 jobs
+  - url: "https://battery-tech.net/battery-markets-news/catl-to-start-battery-production-in-debrecen-next-spring/"
+    company: "CATL"
+    new: true
+    # Battery-tech: CATL Debrecen emissions, Tisza water use, Hungary plant ramp Q1 2026
+  - url: "https://electrification-solutions.com/catl-hungary-plant-set-to-begin-production-in-early-2026/"
+    company: "CATL"
+    new: true
+    # Electrification Solutions: CATL €7.3B Hungary plant for BMW/Stellantis/VW, early 2026 vs Germany site comparison
+  - url: "https://cnevpost.com/2026/02/04/global-ev-battery-market-share-2025/"
+    company: "CATL"
+    new: true
+    # CnEVPost: CATL 39.2% global EV battery share 2025, 464.7 GWh installs up 35.7% YoY
+  - url: "https://www.mysteel.net/news/5120036-flash-catl-reports-5245-revenue-growth-in-q1-2026-net-profit-up-4852-yoy-"
+    company: "CATL"
+    new: true
+    # Mysteel: CATL Q1 2026 revenue +52.45% to ¥129.1B, net profit +48.52% to ¥20.7B
+  - url: "https://battery-tech.net/battery-markets-news/catl-releases-2025-annual-report/"
+    company: "CATL"
+    new: true
+    # Battery-tech: CATL 2025 annual revenue ¥423.7B +17%, net profit ¥72.2B +42%, R&D ¥22.1B
+
+  # LGES — Additional media coverage (Q1 2026 loss, IRA risk, Reuters)
+  - url: "https://www.investing.com/news/stock-market-news/lg-energy-solution-flags-q1-operating-loss-on-weak-ev-demand-4599746"
+    company: "LGES"
+    # Investing.com: LGES flags Q1 2026 operating loss on weak EV demand
+  - url: "https://finance.biggo.com/news/ogUVZ50BZk7xib5fIxOZ"
+    company: "LGES"
+    # Biggo Finance: LGES Q1 2026 operating loss and ex-IRA subsidy dependence
+  - url: "https://en.sedaily.com/markets/2026/04/07/lg-energy-solution-swings-to-operating-loss-of-2078-billion-won"
+    company: "LGES"
+    # Seoul Economic Daily: LGES swings to Q1 2026 operating loss (Apr 2026)
+  - url: "https://www.thehindubusinessline.com/companies/lg-energy-solution-flags-q1-operating-loss-on-weak-ev-demand/article70833426.ece"
+    company: "LGES"
+    # Hindu Business Line: LGES Q1 2026 operating loss on weak EV demand and IRA credits
+  - url: "https://www.reuters.com/business/autos-transportation/lg-energy-solution-posts-quarterly-loss-first-time-three-years-2025-01-24/"
+    company: "LGES"
+    # Reuters: LGES quarterly loss first time in three years and capex cuts (Jan 2025)
+  - url: "https://www.reuters.com/business/autos-transportation/lg-energy-solution-flags-q1-operating-loss-on-weak-ev-demand-2026-04-07/"
+    company: "LGES"
+    # Reuters: LGES Q1 2026 loss and weak EV demand (Apr 2026)
+  - url: "https://finance.yahoo.com/sectors/energy/articles/lg-energy-solution-swings-q1-162329092.html"
+    company: "LGES"
+    # Yahoo Finance: LGES swings to Q1 2026 loss, EV slowdown, ex-IRA details (Apr 2026)
+  - url: "https://www.ainvest.com/news/lg-energy-solution-q1-loss-masks-deeper-ev-battery-oversupply-crisis-high-stakes-ess-pivot-2604/"
+    company: "LGES"
+    # AInvest: LGES Q1 2026 loss, oversupply crisis and subsidy reliance analysis (Apr 2026)
+  - url: "https://www.lgensol.com/en/investors/earnings-announcement"
+    company: "LGES"
+    # LGES official earnings announcement page
+  - url: "https://www.lgensol.com/en/investors/ir-presentation"
+    company: "LGES"
+    # LGES IR presentation archive
+  - url: "https://en.yna.co.kr/view/AEN20260407007100320"
+    company: "LGES"
+    new: true
+    # Yonhap: LGES Q1 2026 operating loss of ₩207.8B, shift from prior profit
+  - url: "https://thelec.net/news/articleView.html?idxno=6412"
+    company: "LGES"
+    new: true
+    # The Elec: LGES Q1 2026 loss details, declining IRA subsidy levels, production adjustments
+  - url: "https://biz.chosun.com/en/en-industry/2026/04/07/U7MMI652IBAXRKN5XW4V3OYYLY/"
+    company: "LGES"
+    new: true
+    # Chosun Biz: LGES Q1 loss despite IRA boost, subsidy reliance exposed
+  - url: "https://www.theinvestor.co.kr/article/10634795"
+    company: "LGES"
+    new: true
+    # The Investor: Korean battery makers (incl. LGES) rethink Europe strategy amid CATL gains
+  - url: "https://www.spglobal.com/ratings/en/regulatory/article/-/view/sourceId/101671833"
+    company: "LGES"
+    new: true
+    # S&P Global: LGES operating hurdles outlook, capex and EV demand challenges
+  - url: "https://finance.yahoo.com/news/lg-energy-solution-reports-lower-101042909.html"
+    company: "LGES"
+    new: true
+    # Yahoo Finance: LGES Q4 2025 lower loss but subsidy dependence, capex cuts
+  - url: "https://www.energy-storage.news/lg-energy-solution-targets-50-percent-share-of-us-energy-storage-market-in-2026/"
+    company: "LGES"
+    new: true
+    # Energy-Storage.News: LGES ESS pivot, capex reduction >40% in 2026, IRA/NA focus
+  - url: "https://koalagains.com/stocks/KOSPI/373220"
+    company: "LGES"
+    new: true
+    # Koala Gains: LGES high debt, cash burn from capex, heavy IRA subsidy reliance for profitability
+  - url: "https://en.sedaily.com/finance/2026/01/02/lg-energy-solution-delays-22-billion-michigan-plant-amid-ev"
+    company: "LGES"
+    new: true
+    # Seoul Economic Daily: LGES Ultium Lansing delay to H2 2025, Ohio/TN plants halted 6 months, ₩13.5T orders canceled post-subsidies
+  - url: "https://ground.news/article/lg-energy-to-ramp-up-energy-storage-business-as-ev-demand-cools"
+    company: "LGES"
+    new: true
+    # Ground News: LGES warns 2026 EV slowdown from US tariffs and IRA end Sep 2025, ESS pivot, subsidy reliance
+
 ground_truth:
   # CATL — Official company IR and news pages
   - url: "https://www.catl.com/en/news/6773.html"
@@ -76,6 +255,18 @@ ground_truth:
   - url: "https://www.catl.com/en/inverelations/"
     company: "CATL"
     # CATL official Investor Relations landing page
+  - url: "https://www.catl.com/en/investors/"
+    company: "CATL"
+    # CATL investor relations landing page
+  - url: "https://www.catl.com/en/investors/announcements/"
+    company: "CATL"
+    # CATL announcements archive
+  - url: "https://www.catl.com/en/investors/annual-reports/"
+    company: "CATL"
+    # CATL annual reports archive
+  - url: "https://www.catl.com/en/investors/financial-reports/"
+    company: "CATL"
+    # CATL financial reports archive
   - url: "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0309/2026030901390.pdf"
     company: "CATL"
     # CATL annual report filing on HKEXnews (Mar 2026)
@@ -88,6 +279,44 @@ ground_truth:
   - url: "https://www.catl.com/en/uploads/1/file/public/202505/20250512071033_9of2dqw816.pdf"
     company: "CATL"
     # CATL capex/official filing (May 2025)
+  - url: "https://www.catl.com/en/uploads/1/file/public/202505/20250514174222_ndwyqrs061.pdf"
+    company: "CATL"
+    # CATL ESG / sustainability report (May 2025)
+  - url: "https://www.catl.com/en/uploads/1/file/public/202603/20260310105310_46xjbwckvn.pdf"
+    company: "CATL"
+    # CATL 2025 Annual Report PDF (Mar 2026)
+  - url: "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0310/2026031000041.pdf"
+    company: "CATL"
+    new: true
+    # CATL 2025 A-Share Annual Report summary and board work report on HKEX (Mar 2026)
+  - url: "https://www.catl.com/en/uploads/1/file/public/202603/20260331135628_dciihbv1qr.pdf"
+    company: "CATL"
+    new: true
+    # CATL 2025 ESG/Sustainability Report (overseas operations, Hungary/Germany details)
+  - url: "https://www.catl.com/en/news/6511.html"
+    company: "CATL"
+    # CATL official news page 6511
+  - url: "https://www.catl.com/en/news/6392.html"
+    company: "CATL"
+    # CATL official news page 6392 (annual report release)
+  - url: "https://www.catl.com/en/news/6328.html"
+    company: "CATL"
+    # CATL official news page 6328
+  - url: "https://www.catl.com/en/news/6401.html"
+    company: "CATL"
+    # CATL official news page 6401
+  - url: "https://www.catl.com/en/news/6291.html"
+    company: "CATL"
+    # CATL official news page 6291
+  - url: "https://www.catl.com/en/news/6345.html"
+    company: "CATL"
+    # CATL official news page 6345
+  - url: "https://www.catl.com/en/news/6278.html"
+    company: "CATL"
+    # CATL official news page 6278 (financial statement)
+  - url: "https://www.catl.com/en/news/6363.html"
+    company: "CATL"
+    # CATL official news page 6363
 
   # LGES — Official IR and earnings
   - url: "https://www.lgensol.com/en/pr/view?idx=2403"
@@ -99,12 +328,65 @@ ground_truth:
   - url: "https://news.lgensol.com/company-news/press-releases/4550/"
     company: "LGES"
     # LGES official press release
+  - url: "https://news.lgensol.com/company-news/press-releases/4303/"
+    company: "LGES"
+    # LGES official press release 4303
+  - url: "https://news.lgensol.com/company-news/press-releases/4052/"
+    company: "LGES"
+    # LGES official press release 4052
+  - url: "https://news.lgensol.com/company-news/press-releases/3808/"
+    company: "LGES"
+    # LGES official press release 3808
+  - url: "https://news.lgensol.com/company-news/press-releases/3748/"
+    company: "LGES"
+    # LGES official press release 3748
+  - url: "https://news.lgensol.com/company-news/supplementary-stories/3868/"
+    company: "LGES"
+    # LGES supplementary story 3868
+  - url: "https://www.lgcorp.com/media/release/28617"
+    company: "LGES"
+    # LG Corp media release 28617
+  - url: "https://www.lgcorp.com/media/release/29824"
+    company: "LGES"
+    new: true
+    # LG Chem 2025 results (includes LGES subsidiary performance context)
+  - url: "https://www.prnewswire.com/news-releases/lg-energy-solution-releases-2025-financial-results-302673359.html"
+    company: "LGES"
+    new: true
+    # PR Newswire: LGES 2025 financial results release (official details on profit, ESS pivot)
+  - url: "https://www.lgensol.com/upload/file/irEvent/25_4Q_LGES_business_performance_F_EN.pdf"
+    company: "LGES"
+    # LGES Q4 2025 business performance presentation (PDF)
+  - url: "https://www.lgensol.com/upload/file/audit-report/2025_1Q_LGES_Audit_Report_CONFS_en.pdf"
+    company: "LGES"
+    # LGES Q1 2025 consolidated financial statements audit report (PDF)
+  - url: "https://www.lgensol.com/upload/file/audit-report/2025_1Q_LGES_Audit_Report_FS_en.pdf"
+    company: "LGES"
+    # LGES Q1 2025 financial statements audit report (PDF)
   - url: "https://englishdart.fss.or.kr/dsbh001/main.do?rcpNo=20250312000405"
     company: "LGES"
     # LGES annual report filing on DART (Mar 2025)
   - url: "https://ajupress.com/news/articleView.html?idxno=1023450"
     company: "LGES"
     # LG Energy Solution Q1 2026 operating loss — IRA subsidy dependence exposed
+  - url: "https://www.lgensol.com/en/investors/earnings-announcement"
+    company: "LGES"
+    # LGES official earnings announcement page
+  - url: "https://www.lgensol.com/en/investors/earnings-release"
+    company: "LGES"
+    # LGES earnings release archive
+  - url: "https://www.lgensol.com/en/investors/business-report"
+    company: "LGES"
+    # LGES business report archive
+  - url: "https://www.lgensol.com/en/investors/annual-reports"
+    company: "LGES"
+    # LGES annual reports archive
+  - url: "https://dart.fss.or.kr/"
+    company: "LGES"
+    # Korea DART filing system
+  - url: "https://englishdart.fss.or.kr/"
+    company: "LGES"
+    # English DART portal
 
 policy:
   - url: "https://home.treasury.gov/policy-issues/inflation-reduction-act"
