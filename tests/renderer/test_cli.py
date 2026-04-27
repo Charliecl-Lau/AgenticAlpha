@@ -10,21 +10,30 @@ def _deck_input():
         catl_overseas_gross_margin_pct=31.4,
         catl_domestic_gross_margin_pct=24.0,
         lges_q1_operating_margin_ex_ira_pct=2.1,
-        roic_shock_delta_bps=180,
+        roic_shock_delta_bps=-180,
         shock_scenario="US EV demand -20%.",
         catl_execution_edge="Hungary on schedule.",
         lges_execution_risk="Ultium delayed.",
+        why_now_takeaway="Divergence accelerated 2025-26",
+        why_now_followup="Verify Hungary utilization",
+        differentiation_takeaway="CATL 2.5x LGES on execution",
+        differentiation_followup="Check JV structures",
+        contradiction_takeaway="IRA risk underpriced",
+        contradiction_followup="Model IRA cliff scenario",
     )
     return DeckInput(
         human=human,
         ai_signals={
-            "CATL": [{"topic_cluster": "Organic_Scale_vs_Export", "sentiment_score": 9,
-                      "summary": "CATL at 50 GWh.", "stream": "perception"}],
-            "LGES": [{"topic_cluster": "Subsidy_Dependence", "sentiment_score": 3,
-                      "summary": "LGES IRA-dependent.", "stream": "perception"}],
+            "CATL": [{"claim_summary": "CATL at 50 GWh."}],
+            "LGES": [{"claim_summary": "LGES IRA-dependent."}],
         },
         divergence_matrix_path="output/charts/quality_divergence_matrix.png",
         trend_inflection_path="output/charts/trend_inflection.png",
+        differentiation_matrix_path="output/charts/differentiation_matrix.png",
+        why_now_timeline_path="output/charts/why_now_timeline.png",
+        contradictions_path="output/charts/contradictions.png",
+        risk_tree_path="output/charts/risk_tree.png",
+        evidence_scale_path="output/charts/evidence_scale.png",
     )
 
 

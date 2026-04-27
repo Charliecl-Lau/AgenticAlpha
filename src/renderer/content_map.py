@@ -24,136 +24,146 @@ class SlideSpec:
 
 def build_slide_specs(deck_input: DeckInput) -> list[SlideSpec]:
     h = deck_input.human
-    ai = deck_input.ai_signals
-    specs: list[SlideSpec] = []
+    s = deck_input.synthesis
+    signals = deck_input.ai_signals
 
-    # Slide 1: Title
-    specs.append(SlideSpec(
-        slide_type=SlideType.TITLE,
-        title="CATL vs LGES: Globalization Quality Divergence",
-        body="UBS Finance Challenge 2026 — Pair Trade Analysis",
-    ))
+    catl_body = "\n".join(
+        f"• {sig.get('claim_summary', sig.get('summary', ''))}"
+        for sig in signals.get("CATL", [])
+    ) or "• No CATL signals tagged."
 
-    # Slide 2: Thesis — factual framing only
-    specs.append(SlideSpec(
-        slide_type=SlideType.THESIS,
-        title="Observed Divergence: Globalization Quality",
-        body=(
-            "CATL's overseas expansion is organic and margin-accretive (greenfield, LFP volume). "
-            "LGES's US presence is structurally dependent on IRA policy arbitrage. "
-            f"Perception and fundamental data show divergent quality: CATL overseas margin {h.catl_overseas_gross_margin_pct:.1f}% "
-            f"vs LGES ex-IRA operating margin {h.lges_q1_operating_margin_ex_ira_pct:.1f}%. "
-            "Human analyst interprets implications for return sustainability."
+    lges_body = "\n".join(
+        f"• {sig.get('claim_summary', sig.get('summary', ''))}"
+        for sig in signals.get("LGES", [])
+    ) or "• No LGES signals tagged."
+
+    analyst_questions_body = (
+        "\n".join(f"• {q}" for q in s.analyst_questions)
+        if s else "• [Add analyst questions here]"
+    )
+    limitations_body = (
+        "\n".join(f"• {lim}" for lim in s.limitations)
+        if s else "• Evidence limited to public IR disclosures and news media."
+    )
+    executive_summary = s.executive_summary if s else ""
+    why_now_body = (
+        f"{s.why_now}\n\nTakeaway: {h.why_now_takeaway}\nFollow-up: {h.why_now_followup}"
+        if s else h.why_now_takeaway
+    )
+    diff_body = (
+        f"{s.differentiation_takeaway}\n\nTakeaway: {h.differentiation_takeaway}\nFollow-up: {h.differentiation_followup}"
+        if s else h.differentiation_takeaway
+    )
+    contra_body = (
+        f"{s.contradiction_summary}\n\nTakeaway: {h.contradiction_takeaway}\nFollow-up: {h.contradiction_followup}"
+        if s else h.contradiction_takeaway
+    )
+
+    specs = [
+        SlideSpec(                                                              # 1
+            slide_type=SlideType.TITLE,
+            title="CATL vs LGES: Globalization Quality Divergence",
+            body="AI-Assisted Institutional Research | AgenticAlpha v2",
         ),
-    ))
-
-    # Slide 3: Quality Divergence Matrix chart
-    specs.append(SlideSpec(
-        slide_type=SlideType.CHART,
-        title="Quality Divergence Matrix: Narrative Evidence",
-        body=(
-            "AI signals show stronger positive perception of CATL execution topics. "
-            f"Human analysis confirms higher overseas margins ({h.catl_overseas_gross_margin_pct:.1f}%)."
+        SlideSpec(                                                              # 2
+            slide_type=SlideType.THESIS,
+            title="Pair Thesis: Quality of Globalization",
+            body=(
+                f"CATL overseas gross margin: {h.catl_overseas_gross_margin_pct:.1f}%\n"
+                f"LGES operating margin ex-IRA: {h.lges_q1_operating_margin_ex_ira_pct:.1f}%\n\n"
+                f"{executive_summary}"
+            ),
         ),
-        chart_path=deck_input.divergence_matrix_path,
-    ))
-
-    # Slide 4: Trend Inflection chart
-    specs.append(SlideSpec(
-        slide_type=SlideType.CHART,
-        title="Sentiment Divergence by Topic",
-        body=(
-            "AI identifies a clear signal divergence on execution vs subsidy themes. "
-            f"Human-verified: LGES ex-IRA operating margin weakness ({h.lges_q1_operating_margin_ex_ira_pct:.1f}%) "
-            "corroborates the negative sentiment cluster around Subsidy_Dependence."
-        ),
-        chart_path=deck_input.trend_inflection_path,
-    ))
-
-    # Slides 5-6: Top AI Signals per company
-    for company in ["CATL", "LGES"]:
-        signals = ai.get(company, [])
-        if signals:
-            bullets = "\n".join(
-                f"• [{s['topic_cluster']}] {s['summary']}" for s in signals[:3]
-            )
-        else:
-            bullets = "[No signals available for this company]"
-        specs.append(SlideSpec(
+        SlideSpec(                                                              # 3
             slide_type=SlideType.AI_SIGNAL,
-            title=f"Top Perception Signals: {company}",
-            body=bullets,
-        ))
-
-    # Slide 7: Margin Comparison Table
-    specs.append(SlideSpec(
-        slide_type=SlideType.FUNDAMENTALS,
-        title="Margin Reality: AI Signal vs Fundamental Data",
-        body="Human-verified financial data cross-checked against perception narratives.",
-        table_rows=[
-            ["Metric", "CATL", "LGES"],
-            ["Overseas Gross Margin", f"{h.catl_overseas_gross_margin_pct:.1f}%", "N/A"],
-            ["Domestic Gross Margin", f"{h.catl_domestic_gross_margin_pct:.1f}%", "N/A"],
-            ["Operating Margin ex-IRA", "N/A", f"{h.lges_q1_operating_margin_ex_ira_pct:.1f}%"],
-        ],
-    ))
-
-    # Slide 8: Execution Edge
-    specs.append(SlideSpec(
-        slide_type=SlideType.FUNDAMENTALS,
-        title="Execution Edge vs Execution Risk",
-        body=(
-            f"CATL: {h.catl_execution_edge}\n\n"
-            f"LGES: {h.lges_execution_risk}"
+            title="AI Workflow: Evidence Engine Architecture",
+            body=(
+                "Pipeline: Ingestion → Rich Tagger → Evidence Engine → Synthesis\n"
+                "Human layer: Analyst inputs + takeaways layered on top\n"
+                "All LLM outputs validated against structured schemas.\n"
+                "No valuation analysis. No trade recommendations."
+            ),
         ),
-    ))
-
-    # Slide 9: Fundamentals placeholder
-    specs.append(SlideSpec(
-        slide_type=SlideType.FUNDAMENTALS,
-        title="Fundamental Analysis: Market Share & Capacity",
-        body="[Analyst-populated slide — insert DCF assumptions, capex schedules, or channel check data here.]",
-    ))
-
-    # Counterfactuals: 1 real + 1 placeholder
-    specs.append(SlideSpec(
-        slide_type=SlideType.COUNTERFACTUAL,
-        title="Downside Scenario: IRA Credit Cap",
-        body=(
-            f"Shock: {h.shock_scenario}\n"
-            f"Estimated ROIC impact: -{h.roic_shock_delta_bps} bps for LGES.\n"
-            "CATL exposure: limited — organic margin not IRA-derived."
+        SlideSpec(                                                              # 4
+            slide_type=SlideType.CHART,
+            title="Differentiation Matrix: Factor Scores (1–10)",
+            body=diff_body,
+            chart_path=deck_input.differentiation_matrix_path,
         ),
-    ))
-    specs.append(SlideSpec(
-        slide_type=SlideType.COUNTERFACTUAL,
-        title="Counterfactual Scenario 2",
-        body="[Analyst-populated — insert specific basis-point impact tied to named risk scenario.]",
-    ))
-
-    # Slides 12-13: Disclosures
-    specs.append(SlideSpec(
-        slide_type=SlideType.DISCLOSURE,
-        title="AI Methodology Disclosure",
-        body=(
-            "The AI Analyst module was used strictly to scale the processing of unstructured perception data "
-            "beyond manual capacity. It did NOT build valuation models, conduct channel checks, or generate "
-            "fundamental forecasts. The AI surfaces narrative divergence; human analysts verified the "
-            "sustainability of returns.\n\n"
-            "LLM: Claude 3.5 Sonnet (Anthropic). Tagged fields: sentiment_score, direction, topic_cluster, "
-            "geo_exposure, summary. All summaries are direct factual extractions — no AI opinions or conclusions."
+        SlideSpec(                                                              # 5
+            slide_type=SlideType.CHART,
+            title="Why Now: Topic Frequency Timeline",
+            body=why_now_body,
+            chart_path=deck_input.why_now_timeline_path,
         ),
-    ))
-    specs.append(SlideSpec(
-        slide_type=SlideType.DISCLOSURE,
-        title="Limitations & Data Sources",
-        body=(
-            "• Perception stream: Bloomberg and Moomoo news URLs (12-24 month window).\n"
-            "• Ground Truth stream: Investor Relations documents (earnings transcripts, capex filings).\n"
-            "• Sentiment scores are relative within this dataset — not absolute market signals.\n"
-            "• No channel checks, primary research, or equity research model access was used by the AI module."
+        SlideSpec(                                                              # 6
+            slide_type=SlideType.CHART,
+            title="Contradiction Scanner: Evidence Challenging Thesis",
+            body=contra_body,
+            chart_path=deck_input.contradictions_path,
         ),
-    ))
+        SlideSpec(                                                              # 7
+            slide_type=SlideType.CHART,
+            title="Evidence Scale: Document Attribution by Stream",
+            body="Corroboration across perception, ground truth, policy, and operations streams.",
+            chart_path=deck_input.evidence_scale_path,
+        ),
+        SlideSpec(                                                              # 8
+            slide_type=SlideType.AI_SIGNAL,
+            title="Top Perception Signals: CATL",
+            body=catl_body,
+        ),
+        SlideSpec(                                                              # 9
+            slide_type=SlideType.AI_SIGNAL,
+            title="Top Perception Signals: LGES",
+            body=lges_body,
+        ),
+        SlideSpec(                                                              # 10
+            slide_type=SlideType.FUNDAMENTALS,
+            title="Margin Bridge: AI Signal vs Fundamental Data",
+            table_rows=[
+                ["Metric", "CATL", "LGES"],
+                ["Overseas Gross Margin", f"{h.catl_overseas_gross_margin_pct:.1f}%", "N/A"],
+                ["Domestic Gross Margin", f"{h.catl_domestic_gross_margin_pct:.1f}%", "N/A"],
+                ["Operating Margin ex-IRA", "N/A", f"{h.lges_q1_operating_margin_ex_ira_pct:.1f}%"],
+            ],
+        ),
+        SlideSpec(                                                              # 11
+            slide_type=SlideType.CHART,
+            title="Risk Tree: Likelihood × Impact Matrix",
+            body="Policy risk, execution risk, capex mismatch, and ROIC deterioration.",
+            chart_path=deck_input.risk_tree_path,
+        ),
+        SlideSpec(                                                              # 12
+            slide_type=SlideType.COUNTERFACTUAL,
+            title="Downside Scenario: IRA Credit Cap",
+            body=(
+                f"Scenario: {h.shock_scenario}\n"
+                f"ROIC impact: {h.roic_shock_delta_bps:+d} bps\n"
+                f"Execution risk: {h.lges_execution_risk}"
+            ),
+        ),
+        SlideSpec(                                                              # 13
+            slide_type=SlideType.AI_SIGNAL,
+            title="Analyst Questions for Follow-Up",
+            body=analyst_questions_body,
+        ),
+        SlideSpec(                                                              # 14
+            slide_type=SlideType.DISCLOSURE,
+            title="Methodology Limitations",
+            body=limitations_body,
+        ),
+        SlideSpec(                                                              # 15
+            slide_type=SlideType.DISCLOSURE,
+            title="AI Methodology Disclosure",
+            body=(
+                "Evidence collected via automated ingestion from public sources.\n"
+                "Tags generated by LLM (Google Gemini) with schema validation.\n"
+                "Synthesis generated by Claude (Anthropic) — one call, no recommendations.\n"
+                "No valuation analysis, channel checks, or non-public information."
+            ),
+        ),
+    ]
 
-    assert len(specs) <= 20, f"Deck exceeds 20 slides: {len(specs)}"
+    assert len(specs) <= 20, f"Slide count {len(specs)} exceeds maximum of 20"
     return specs
