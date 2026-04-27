@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 import pandas as pd
 
@@ -11,7 +11,6 @@ class DeckInput:
     """Single source of truth consumed by the Stage 5 deck renderer."""
     human: HumanInputs
     ai_signals: dict[str, list[dict]]
-    synthesis: Optional[object]
     divergence_matrix_path: str
     trend_inflection_path: str
     differentiation_matrix_path: str
@@ -19,6 +18,7 @@ class DeckInput:
     contradictions_path: str
     risk_tree_path: str
     evidence_scale_path: str
+    synthesis: Optional[object] = field(default=None)
 
 
 def merge_inputs(

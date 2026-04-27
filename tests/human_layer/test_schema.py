@@ -169,10 +169,10 @@ def test_human_inputs_loads_new_analyst_fields(tmp_path):
 
 
 def test_why_now_takeaway_rejects_empty(tmp_path):
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         load_human_inputs(_full_yaml(tmp_path, why_now_takeaway=""))
 
 
 def test_why_now_takeaway_rejects_placeholder(tmp_path):
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         load_human_inputs(_full_yaml(tmp_path, why_now_takeaway="tbd"))
