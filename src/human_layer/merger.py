@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Optional
 import pandas as pd
@@ -19,6 +21,8 @@ class DeckInput:
     risk_tree_path: str
     evidence_scale_path: str
     synthesis: Optional[object] = field(default=None)
+    analyst_brief: str = field(default="")
+    key_tables: dict = field(default_factory=dict)
 
 
 def merge_inputs(
@@ -32,7 +36,9 @@ def merge_inputs(
     risk_tree_path: str,
     evidence_scale_path: str,
     synthesis=None,
-    top_n: int = 3,
+    top_n: int = 5,
+    analyst_brief: str = "",
+    key_tables: dict | None = None,
 ) -> DeckInput:
     """Package validated human inputs, top-N AI signals, chart paths, and optional synthesis into a DeckInput for Stage 5."""
     ai_signals = extract_top_signals(tag_df, n=top_n)
@@ -47,4 +53,6 @@ def merge_inputs(
         contradictions_path=contradictions_path,
         risk_tree_path=risk_tree_path,
         evidence_scale_path=evidence_scale_path,
+        analyst_brief=analyst_brief,
+        key_tables=key_tables or {},
     )

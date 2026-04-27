@@ -30,6 +30,10 @@ class FakeSynthesis:
     risk_summary = "Policy reversal is primary bear case."
     analyst_questions = ["What is LGES Hungary utilization at IRA cap?"]
     limitations = ["Evidence limited to public disclosures."]
+    overall_confidence = "7/10 — strong corpus."
+    strongest_supporting_evidence = ["CATL margin 31.4%."]
+    contrary_risk_evidence = ["LGES IRA dependency."]
+    differentiation_matrix = []
 
 
 def _deck_input(synthesis=None):
@@ -56,9 +60,9 @@ def test_build_slide_specs_returns_list_of_slide_specs():
     assert all(isinstance(s, SlideSpec) for s in specs)
 
 
-def test_slide_count_is_15():
+def test_slide_count_is_17():
     specs = build_slide_specs(_deck_input())
-    assert len(specs) == 15
+    assert len(specs) == 17
 
 
 def test_differentiation_matrix_slide_present():

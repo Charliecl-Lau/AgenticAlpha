@@ -5,15 +5,15 @@ from src.human_layer.summariser import extract_top_signals
 def _make_df():
     return pd.DataFrame([
         {"company": "CATL", "topic_cluster": "Organic_Scale_vs_Export",
-         "sentiment_score": 9, "summary": "CATL Hungary at 50 GWh.", "stream": "perception"},
+         "sentiment_score": 9, "claim_summary": "CATL Hungary at 50 GWh.", "stream": "perception"},
         {"company": "CATL", "topic_cluster": "Capex_Execution",
-         "sentiment_score": 8, "summary": "CATL capex efficiency outperforms.", "stream": "perception"},
+         "sentiment_score": 8, "claim_summary": "CATL capex efficiency outperforms.", "stream": "perception"},
         {"company": "LGES", "topic_cluster": "Subsidy_Dependence",
-         "sentiment_score": 3, "summary": "LGES IRA credits dominate revenue.", "stream": "perception"},
+         "sentiment_score": 3, "claim_summary": "LGES IRA credits dominate revenue.", "stream": "perception"},
         {"company": "LGES", "topic_cluster": "Geopolitical_Noise",
-         "sentiment_score": 4, "summary": "LGES faces US tariff uncertainty.", "stream": "perception"},
+         "sentiment_score": 4, "claim_summary": "LGES faces US tariff uncertainty.", "stream": "perception"},
         {"company": "CATL", "topic_cluster": "Organic_Scale_vs_Export",
-         "sentiment_score": 7, "summary": "CATL LFP volume up 40% YoY.", "stream": "ground_truth"},
+         "sentiment_score": 7, "claim_summary": "CATL LFP volume up 40% YoY.", "stream": "ground_truth"},
     ])
 
 
@@ -39,7 +39,7 @@ def test_extract_top_signals_includes_summary_and_topic():
     df = _make_df()
     signals = extract_top_signals(df, n=1)
     top_catl = signals["CATL"][0]
-    assert "summary" in top_catl
+    assert "claim_summary" in top_catl
     assert "topic_cluster" in top_catl
     assert "sentiment_score" in top_catl
     assert "stream" in top_catl
