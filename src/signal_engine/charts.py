@@ -180,3 +180,35 @@ def build_why_now_timeline_chart(timeline_df: pd.DataFrame, output_path: str) ->
         height=500,
     )
     fig.write_image(output_path)
+
+
+def build_contradiction_chart(contradictions_df: pd.DataFrame, output_path: str) -> None:
+    import plotly.graph_objects as go
+
+    if contradictions_df.empty:
+        go.Figure().update_layout(
+            title="Contradiction Scanner (no contradictions identified)", width=900, height=300,
+        ).write_image(output_path)
+        return
+
+    fig = go.Figure()
+    colors = {"CATL": "#2563EB", "LGES": "#DC2626"}
+    for company, sub in contradictions_df.groupby("company"):
+        fig.add_trace(go.Scatter(
+            x=sub["sentiment_score"],
+            y=sub["claim_summary"].str[:60],
+            mode="markers+text",
+            name=company,
+            marker=dict(size=14, color=colors.get(company, "grey")),
+            text=sub["contradiction_reason"].str[:40],
+            textposition="top center",
+        ))
+
+    fig.update_layout(
+        title="Contradiction Scanner: Evidence Challenging Bull Thesis",
+        xaxis=dict(title="Sentiment Score (lower = more bearish)", range=[0, 10]),
+        template="plotly_white",
+        width=1000,
+        height=max(400, len(contradictions_df) * 60),
+    )
+    fig.write_image(output_path)

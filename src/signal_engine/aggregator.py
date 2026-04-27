@@ -110,3 +110,11 @@ def compute_timeline(df: pd.DataFrame) -> pd.DataFrame:
                 rows.append({"quarter": quarter, "company": company, "topic": "contradiction", "mention_count": contra})
 
     return pd.DataFrame(rows)
+
+
+def compute_contradictions(df: pd.DataFrame) -> pd.DataFrame:
+    if "contradiction_flag" not in df.columns:
+        return pd.DataFrame(columns=["company", "claim_summary", "contradiction_reason", "sentiment_score"])
+    flagged = df[df["contradiction_flag"] == True].copy()
+    keep = [c for c in ["company", "claim_summary", "contradiction_reason", "sentiment_score", "contradiction_flag"] if c in flagged.columns]
+    return flagged[keep].reset_index(drop=True)

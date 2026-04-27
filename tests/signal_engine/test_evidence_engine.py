@@ -78,3 +78,46 @@ def test_build_why_now_timeline_chart_creates_file(tmp_path):
     out = str(tmp_path / "why_now.png")
     build_why_now_timeline_chart(tl, out)
     assert pathlib.Path(out).exists()
+
+from src.signal_engine.aggregator import compute_contradictions
+
+def _make_contradiction_df():
+    return pd.DataFrame([
+        {"company": "CATL", "contradiction_flag": True, "sentiment_score": 3.0,
+         "claim_summary": "CATL margins fell sharply.",
+         "contradiction_reason": "Challenges bull thesis on margins."},
+        {"company": "CATL", "contradiction_flag": False, "sentiment_score": 8.0,
+         "claim_summary": "CATL capacity on track.", "contradiction_reason": None},
+        {"company": "LGES", "contradiction_flag": True, "sentiment_score": 2.0,
+         "claim_summary": "LGES IRA credit at risk.",
+         "contradiction_reason": "Policy risk not priced in."},
+    ])
+
+def test_compute_contradictions_returns_only_flagged():
+    df = compute_contradictions(_make_contradiction_df())
+    assert len(df) == 2
+    assert all(df["contradiction_flag"])
+
+def test_compute_contradictions_has_required_columns():
+    df = compute_contradictions(_make_contradiction_df())
+    for col in ["company", "claim_summary", "contradiction_reason", "sentiment_score"]:
+        assert col in df.columns
+
+def test_compute_contradictions_empty_when_no_flags():
+    df = compute_contradictions(pd.DataFrame([
+        {"company": "CATL", "contradiction_flag": False, "sentiment_score": 7.0,
+         "claim_summary": "Good.", "contradiction_reason": None},
+    ]))
+    assert len(df) == 0
+
+def test_compute_contradictions_no_column_returns_empty():
+    df = compute_contradictions(pd.DataFrame(columns=["company", "sentiment_score"]))
+    assert len(df) == 0
+
+from src.signal_engine.charts import build_contradiction_chart
+
+def test_build_contradiction_chart_creates_file(tmp_path):
+    df = compute_contradictions(_make_contradiction_df())
+    out = str(tmp_path / "contradictions.png")
+    build_contradiction_chart(df, out)
+    assert pathlib.Path(out).exists()
