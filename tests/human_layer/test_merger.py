@@ -33,9 +33,9 @@ def _human_inputs():
 def _tag_df():
     return pd.DataFrame([
         {"company": "CATL", "topic_cluster": "Organic_Scale_vs_Export",
-         "sentiment_score": 9, "summary": "CATL at 50 GWh.", "stream": "perception"},
+         "sentiment_score": 9, "claim_summary": "CATL at 50 GWh.", "stream": "perception"},
         {"company": "LGES", "topic_cluster": "Subsidy_Dependence",
-         "sentiment_score": 3, "summary": "LGES IRA-dependent.", "stream": "perception"},
+         "sentiment_score": 3, "claim_summary": "LGES IRA-dependent.", "stream": "perception"},
     ])
 
 

@@ -3,12 +3,25 @@ from unittest.mock import patch
 from src.synthesis.schema import SynthesisOutput
 
 _FAKE_OUTPUT = SynthesisOutput(
+    research_question="Does CATL outperform LGES on globalization quality?",
     executive_summary="CATL leads.",
+    differentiation_matrix=[
+        {
+            "factor": "execution",
+            "catl_evidence": "Strong.",
+            "lges_evidence": "Weak.",
+            "implication": "CATL wins.",
+            "supporting_tags": "Capex_Execution",
+        }
+    ],
     why_now="2025 divergence.",
     differentiation_takeaway="Execution gap.",
     contradiction_summary="Two contradictions.",
     risk_summary="Policy risk.",
+    strongest_supporting_evidence=["CATL margin 31.4%."],
+    contrary_risk_evidence=["LGES IRA dependency."],
     analyst_questions=["Q1?"],
+    overall_confidence="7/10 — strong data, limited ground truth.",
     limitations=["L1."],
 )
 
