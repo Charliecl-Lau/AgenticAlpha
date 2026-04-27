@@ -1,8 +1,9 @@
 # tests/ingestion/test_pipeline.py
 import json
+import yaml
 from pathlib import Path
 from unittest.mock import patch
-from src.ingestion.pipeline import run_ingestion
+from src.ingestion.pipeline import run_ingestion, _build_frontmatter
 from src.ingestion.config import UrlConfig, UrlEntry
 from src.ingestion.fetcher import PdfSkipError
 
@@ -96,3 +97,40 @@ def test_run_ingestion_handles_empty_streams(tmp_path):
     assert manifest["total"] == 0
     assert manifest["succeeded"] == 0
     assert manifest["failed"] == 0
+
+
+def test_build_frontmatter_contains_required_fields():
+    fm = _build_frontmatter(
+        company="CATL",
+        source="Reuters",
+        source_type="perception",
+        region="US",
+        date="2026-04-26",
+    )
+    inner = fm.replace("---\n", "").strip()
+    parsed = yaml.safe_load(inner)
+    assert parsed["company"] == "CATL"
+    assert parsed["source"] == "Reuters"
+    assert parsed["source_type"] == "perception"
+    assert parsed["region"] == "US"
+    assert parsed["date"] == "2026-04-26"
+
+
+def test_build_frontmatter_handles_none_source():
+    fm = _build_frontmatter(
+        company="LGES",
+        source=None,
+        source_type="ground_truth",
+        region=None,
+        date=None,
+    )
+    assert "---" in fm
+    assert "company: LGES" in fm
+    assert "source_type: ground_truth" in fm
+
+
+def test_build_frontmatter_uses_today_when_date_none():
+    import datetime
+    fm = _build_frontmatter(company="CATL", source=None, source_type="policy", region=None, date=None)
+    today = datetime.date.today().isoformat()
+    assert today in fm
