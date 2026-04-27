@@ -133,3 +133,24 @@ def build_trend_inflection(sentiment_df: pd.DataFrame) -> go.Figure:
         margin=dict(b=90, t=110),
     )
     return fig
+
+
+def build_differentiation_matrix_chart(diff_df: pd.DataFrame, output_path: str) -> None:
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        name="CATL", x=diff_df["factor"], y=diff_df["CATL"],
+        marker_color="#2563EB",
+    ))
+    fig.add_trace(go.Bar(
+        name="LGES", x=diff_df["factor"], y=diff_df["LGES"],
+        marker_color="#DC2626",
+    ))
+    fig.update_layout(
+        title="Differentiation Matrix: CATL vs LGES (1–10 scale)",
+        barmode="group",
+        yaxis=dict(range=[0, 10], title="Signal Score"),
+        xaxis_title="Factor",
+        template="plotly_white",
+        width=900, height=500,
+    )
+    fig.write_image(output_path)

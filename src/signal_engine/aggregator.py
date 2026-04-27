@@ -59,3 +59,29 @@ def compute_weighted_sentiment(df: pd.DataFrame) -> pd.DataFrame:
     )
     agg["weighted_mean_sentiment"] = (agg["_ws"] / agg["_w"]).round(1)
     return agg[["company", "topic_cluster", "weighted_mean_sentiment"]]
+
+
+_DIFF_FACTORS: dict[str, str] = {
+    "localization":     "localization_score",
+    "subsidy_reliance": "subsidy_dependency",
+    "execution":        "execution_quality",
+    "capex_efficiency": "capex_signal",
+    "margin_quality":   "margin_signal",
+    "ROIC":             "ROIC_signal",
+}
+
+
+def compute_differentiation_matrix(df: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for factor_name, col in _DIFF_FACTORS.items():
+        if col not in df.columns:
+            continue
+        catl_vals = df[df["company"] == "CATL"][col]
+        lges_vals = df[df["company"] == "LGES"][col]
+        if catl_vals.empty and lges_vals.empty:
+            continue
+        catl_mean = round(float(catl_vals.mean()), 2) if not catl_vals.empty else None
+        lges_mean = round(float(lges_vals.mean()), 2) if not lges_vals.empty else None
+        delta = round(catl_mean - lges_mean, 2) if (catl_mean is not None and lges_mean is not None) else None
+        rows.append({"factor": factor_name, "CATL": catl_mean, "LGES": lges_mean, "delta": delta})
+    return pd.DataFrame(rows)
