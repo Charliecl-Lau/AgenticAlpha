@@ -55,3 +55,79 @@ def test_load_url_config_deduplicates_within_stream(tmp_path):
     )
     config = load_url_config(str(config_file))
     assert len(config.perception) == 1
+
+
+def test_url_config_has_policy_stream(tmp_path):
+    cfg = tmp_path / "urls.yaml"
+    cfg.write_text("""
+perception: []
+ground_truth: []
+policy:
+  - url: https://www.irs.gov/credits-deductions/inflation-reduction-act
+    company: CATL
+    source: IRS
+    region: US
+operations: []
+""")
+    config = load_url_config(str(cfg))
+    assert len(config.policy) == 1
+    assert config.policy[0].company == "CATL"
+
+
+def test_url_config_has_operations_stream(tmp_path):
+    cfg = tmp_path / "urls.yaml"
+    cfg.write_text("""
+perception: []
+ground_truth: []
+policy: []
+operations:
+  - url: https://example.com/lges-commissioning
+    company: LGES
+    source: LGES IR
+    region: EU
+""")
+    config = load_url_config(str(cfg))
+    assert len(config.operations) == 1
+    assert config.operations[0].region == "EU"
+
+
+def test_url_entry_has_optional_source_and_region(tmp_path):
+    cfg = tmp_path / "urls.yaml"
+    cfg.write_text("""
+perception:
+  - url: https://example.com/article
+    company: CATL
+ground_truth: []
+policy: []
+operations: []
+""")
+    config = load_url_config(str(cfg))
+    entry = config.perception[0]
+    assert entry.source is None
+    assert entry.region is None
+
+
+def test_url_entry_source_and_region_populated_when_given(tmp_path):
+    cfg = tmp_path / "urls.yaml"
+    cfg.write_text("""
+perception:
+  - url: https://example.com/article
+    company: CATL
+    source: Reuters
+    region: US
+ground_truth: []
+policy: []
+operations: []
+""")
+    config = load_url_config(str(cfg))
+    entry = config.perception[0]
+    assert entry.source == "Reuters"
+    assert entry.region == "US"
+
+
+def test_missing_policy_key_defaults_to_empty(tmp_path):
+    cfg = tmp_path / "urls.yaml"
+    cfg.write_text("perception: []\nground_truth: []\n")
+    config = load_url_config(str(cfg))
+    assert config.policy == []
+    assert config.operations == []

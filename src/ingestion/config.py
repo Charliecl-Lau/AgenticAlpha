@@ -1,42 +1,42 @@
-# src/ingestion/config.py
-from pathlib import Path
+from typing import Optional
 from pydantic import BaseModel, field_validator
-import yaml
 
 
 class UrlEntry(BaseModel):
     url: str
     company: str
+    source: Optional[str] = None
+    region: Optional[str] = None
 
     @field_validator("url")
     @classmethod
-    def url_must_be_http(cls, v: str) -> str:
-        if not v.startswith(("http://", "https://")):
-            raise ValueError(f"url must start with http:// or https://, got: {v!r}")
+    def validate_url(cls, v: str) -> str:
+        if not (v.startswith("http://") or v.startswith("https://")):
+            raise ValueError(f"URL must start with http:// or https://: {v}")
         return v
 
 
 class UrlConfig(BaseModel):
-    perception: list[UrlEntry]
-    ground_truth: list[UrlEntry]
+    perception: list[UrlEntry] = []
+    ground_truth: list[UrlEntry] = []
+    policy: list[UrlEntry] = []
+    operations: list[UrlEntry] = []
 
-    @field_validator("perception", "ground_truth", mode="before")
+    @field_validator("perception", "ground_truth", "policy", "operations", mode="before")
     @classmethod
-    def deduplicate_urls(cls, entries: list) -> list:
+    def deduplicate(cls, v: list) -> list:
         seen: set[str] = set()
-        deduped = []
-        for e in entries:
-            url = e["url"] if isinstance(e, dict) else e.url
+        out = []
+        for item in v:
+            url = item["url"] if isinstance(item, dict) else item.url
             if url not in seen:
                 seen.add(url)
-                deduped.append(e)
-        return deduped
+                out.append(item)
+        return out
 
 
 def load_url_config(path: str) -> UrlConfig:
-    p = Path(path)
-    if not p.exists():
-        raise FileNotFoundError(f"Config not found: {path}")
-    with open(p) as f:
-        data = yaml.safe_load(f)
+    import yaml
+    with open(path, encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
     return UrlConfig(**data)
