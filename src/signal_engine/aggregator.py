@@ -118,3 +118,30 @@ def compute_contradictions(df: pd.DataFrame) -> pd.DataFrame:
     flagged = df[df["contradiction_flag"] == True].copy()
     keep = [c for c in ["company", "claim_summary", "contradiction_reason", "sentiment_score", "contradiction_flag"] if c in flagged.columns]
     return flagged[keep].reset_index(drop=True)
+
+
+_RISK_MAP: dict[str, tuple[str, bool]] = {
+    # (column_name, True if high score = high risk)
+    "policy_risk":    ("subsidy_dependency", True),
+    "execution_risk": ("execution_quality",  False),
+    "capex_risk":     ("capex_signal",       False),
+    "margin_risk":    ("margin_signal",      False),
+    "ROIC_risk":      ("ROIC_signal",        False),
+}
+
+
+def compute_risk_tree(df: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for company, group in df.groupby("company"):
+        for risk_cat, (col, risk_when_high) in _RISK_MAP.items():
+            if col not in df.columns:
+                continue
+            avg = group[col].mean()
+            likelihood = round(avg / 10.0 if risk_when_high else (10.0 - avg) / 10.0, 2)
+            rows.append({
+                "company": company,
+                "risk_category": risk_cat,
+                "likelihood": likelihood,
+                "impact": 0.7,
+            })
+    return pd.DataFrame(rows)

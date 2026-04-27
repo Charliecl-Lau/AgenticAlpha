@@ -182,6 +182,41 @@ def build_why_now_timeline_chart(timeline_df: pd.DataFrame, output_path: str) ->
     fig.write_image(output_path)
 
 
+def build_risk_tree_chart(risk_df: pd.DataFrame, output_path: str) -> None:
+    import plotly.graph_objects as go
+
+    if risk_df.empty:
+        go.Figure().write_image(output_path)
+        return
+
+    colors = {"CATL": "#2563EB", "LGES": "#DC2626"}
+    fig = go.Figure()
+    for company, group in risk_df.groupby("company"):
+        fig.add_trace(go.Scatter(
+            x=group["likelihood"],
+            y=group["impact"],
+            mode="markers+text",
+            name=company,
+            text=group["risk_category"],
+            textposition="top center",
+            marker=dict(
+                size=group["likelihood"] * 40 + 10,
+                color=colors.get(company, "grey"),
+                opacity=0.7,
+            ),
+        ))
+
+    fig.update_layout(
+        title="Risk Tree: Likelihood × Impact",
+        xaxis=dict(title="Likelihood (0–1)", range=[0, 1.1]),
+        yaxis=dict(title="Impact (0–1)", range=[0, 1.1]),
+        template="plotly_white",
+        width=800,
+        height=600,
+    )
+    fig.write_image(output_path)
+
+
 def build_contradiction_chart(contradictions_df: pd.DataFrame, output_path: str) -> None:
     import plotly.graph_objects as go
 

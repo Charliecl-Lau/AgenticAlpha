@@ -121,3 +121,41 @@ def test_build_contradiction_chart_creates_file(tmp_path):
     out = str(tmp_path / "contradictions.png")
     build_contradiction_chart(df, out)
     assert pathlib.Path(out).exists()
+
+from src.signal_engine.aggregator import compute_risk_tree
+
+def _make_risk_df():
+    return pd.DataFrame([
+        {"company": "CATL", "subsidy_dependency": 3, "execution_quality": 9,
+         "capex_signal": 8, "margin_signal": 7, "ROIC_signal": 7},
+        {"company": "LGES", "subsidy_dependency": 8, "execution_quality": 4,
+         "capex_signal": 4, "margin_signal": 3, "ROIC_signal": 3},
+    ])
+
+def test_compute_risk_tree_has_required_columns():
+    df = compute_risk_tree(_make_risk_df())
+    for col in ["company", "risk_category", "likelihood", "impact"]:
+        assert col in df.columns
+
+def test_compute_risk_tree_likelihood_0_to_1():
+    df = compute_risk_tree(_make_risk_df())
+    assert (df["likelihood"] >= 0.0).all()
+    assert (df["likelihood"] <= 1.0).all()
+
+def test_compute_risk_tree_lges_higher_policy_risk():
+    df = compute_risk_tree(_make_risk_df())
+    catl = df[(df["company"] == "CATL") & (df["risk_category"] == "policy_risk")]["likelihood"].values[0]
+    lges = df[(df["company"] == "LGES") & (df["risk_category"] == "policy_risk")]["likelihood"].values[0]
+    assert lges > catl
+
+def test_compute_risk_tree_empty_returns_empty():
+    df = compute_risk_tree(pd.DataFrame(columns=["company"]))
+    assert len(df) == 0
+
+from src.signal_engine.charts import build_risk_tree_chart
+
+def test_build_risk_tree_chart_creates_file(tmp_path):
+    df = compute_risk_tree(_make_risk_df())
+    out = str(tmp_path / "risk_tree.png")
+    build_risk_tree_chart(df, out)
+    assert pathlib.Path(out).exists()
