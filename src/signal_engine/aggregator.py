@@ -85,3 +85,28 @@ def compute_differentiation_matrix(df: pd.DataFrame) -> pd.DataFrame:
         delta = round(catl_mean - lges_mean, 2) if (catl_mean is not None and lges_mean is not None) else None
         rows.append({"factor": factor_name, "CATL": catl_mean, "LGES": lges_mean, "delta": delta})
     return pd.DataFrame(rows)
+
+
+def compute_timeline(df: pd.DataFrame) -> pd.DataFrame:
+    if "date" not in df.columns:
+        return pd.DataFrame(columns=["quarter", "company", "topic", "mention_count"])
+
+    df2 = df.copy()
+    df2["_dt"] = pd.to_datetime(df2["date"], errors="coerce")
+    df2 = df2.dropna(subset=["_dt"])
+    if df2.empty:
+        return pd.DataFrame(columns=["quarter", "company", "topic", "mention_count"])
+
+    df2["quarter"] = df2["_dt"].dt.to_period("Q").astype(str)
+
+    rows = []
+    for (quarter, company, topic), group in df2.groupby(["quarter", "company", "topic_cluster"]):
+        rows.append({"quarter": quarter, "company": company, "topic": topic, "mention_count": len(group)})
+
+    if "contradiction_flag" in df2.columns:
+        for (quarter, company), group in df2.groupby(["quarter", "company"]):
+            contra = int(group["contradiction_flag"].sum())
+            if contra > 0:
+                rows.append({"quarter": quarter, "company": company, "topic": "contradiction", "mention_count": contra})
+
+    return pd.DataFrame(rows)

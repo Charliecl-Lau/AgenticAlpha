@@ -40,3 +40,41 @@ def test_build_differentiation_matrix_chart_creates_file(tmp_path):
     build_differentiation_matrix_chart(df, out)
     assert pathlib.Path(out).exists()
     assert pathlib.Path(out).stat().st_size > 0
+
+from src.signal_engine.aggregator import compute_timeline
+
+def _make_timeline_df():
+    return pd.DataFrame([
+        {"company": "CATL", "date": "2025-01-10", "topic_cluster": "Capex_Execution",
+         "contradiction_flag": False},
+        {"company": "CATL", "date": "2025-03-15", "topic_cluster": "Capex_Execution",
+         "contradiction_flag": True},
+        {"company": "LGES", "date": "2025-01-20", "topic_cluster": "Subsidy_Dependence",
+         "contradiction_flag": False},
+        {"company": "LGES", "date": "2025-04-05", "topic_cluster": "Subsidy_Dependence",
+         "contradiction_flag": False},
+    ])
+
+def test_compute_timeline_returns_dataframe():
+    assert isinstance(compute_timeline(_make_timeline_df()), pd.DataFrame)
+
+def test_compute_timeline_has_required_columns():
+    df = compute_timeline(_make_timeline_df())
+    for col in ["quarter", "company", "topic", "mention_count"]:
+        assert col in df.columns
+
+def test_compute_timeline_no_date_column_returns_empty():
+    df = compute_timeline(pd.DataFrame(columns=["company", "topic_cluster"]))
+    assert len(df) == 0
+
+def test_compute_timeline_assigns_quarters():
+    df = compute_timeline(_make_timeline_df())
+    assert any("2025" in str(q) for q in df["quarter"].unique())
+
+from src.signal_engine.charts import build_why_now_timeline_chart
+
+def test_build_why_now_timeline_chart_creates_file(tmp_path):
+    tl = compute_timeline(_make_timeline_df())
+    out = str(tmp_path / "why_now.png")
+    build_why_now_timeline_chart(tl, out)
+    assert pathlib.Path(out).exists()

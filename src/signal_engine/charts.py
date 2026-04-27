@@ -154,3 +154,29 @@ def build_differentiation_matrix_chart(diff_df: pd.DataFrame, output_path: str) 
         width=900, height=500,
     )
     fig.write_image(output_path)
+
+
+def build_why_now_timeline_chart(timeline_df: pd.DataFrame, output_path: str) -> None:
+    import plotly.express as px
+    import plotly.graph_objects as go
+
+    if timeline_df.empty:
+        go.Figure().update_layout(
+            title="Why Now Timeline (no data)", width=900, height=400,
+        ).write_image(output_path)
+        return
+
+    fig = px.line(
+        timeline_df,
+        x="quarter",
+        y="mention_count",
+        color="topic",
+        line_dash="company",
+        markers=True,
+        title="Why Now: Topic Mention Frequency by Quarter",
+        labels={"mention_count": "Mentions", "quarter": "Quarter"},
+        template="plotly_white",
+        width=900,
+        height=500,
+    )
+    fig.write_image(output_path)
