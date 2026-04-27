@@ -3,7 +3,21 @@ import logging
 from pathlib import Path
 from src.signal_engine.loader import load_tags
 from src.signal_engine.aggregator import compute_topic_counts, compute_sentiment_trend, compute_weighted_sentiment
+from src.signal_engine.aggregator import (
+    compute_differentiation_matrix,
+    compute_timeline,
+    compute_contradictions,
+    compute_risk_tree,
+    compute_evidence_attribution,
+)
 from src.signal_engine.charts import build_divergence_matrix, build_trend_inflection
+from src.signal_engine.charts import (
+    build_differentiation_matrix_chart,
+    build_why_now_timeline_chart,
+    build_contradiction_chart,
+    build_risk_tree_chart,
+    build_evidence_scale_chart,
+)
 from src.human_layer.schema import load_human_inputs
 
 logger = logging.getLogger(__name__)
@@ -37,6 +51,23 @@ def run_signal_engine(tags_dir: str, output_dir: str, human_inputs_path: str = "
     inflection_fig.write_image(inflection_path, width=900, height=600)
     logger.info("Saved %s", divergence_path)
     logger.info("Saved %s", inflection_path)
+
+    import os as _os
+
+    diff_df = compute_differentiation_matrix(df)
+    build_differentiation_matrix_chart(diff_df, _os.path.join(output_dir, "differentiation_matrix.png"))
+
+    timeline_df = compute_timeline(df)
+    build_why_now_timeline_chart(timeline_df, _os.path.join(output_dir, "why_now_timeline.png"))
+
+    contra_df = compute_contradictions(df)
+    build_contradiction_chart(contra_df, _os.path.join(output_dir, "contradictions.png"))
+
+    risk_df = compute_risk_tree(df)
+    build_risk_tree_chart(risk_df, _os.path.join(output_dir, "risk_tree.png"))
+
+    attrib_df = compute_evidence_attribution(df)
+    build_evidence_scale_chart(attrib_df, _os.path.join(output_dir, "evidence_scale.png"))
 
 
 def main() -> None:

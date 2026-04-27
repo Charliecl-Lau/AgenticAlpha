@@ -57,3 +57,35 @@ def test_run_signal_engine_passes_trend_to_divergence_matrix(tmp_path):
     assert len(captured_kwargs["sentiment_df"]) > 0
     assert captured_kwargs["human_metrics"] is not None
     assert "catl_margin" in captured_kwargs["human_metrics"]
+
+
+import json
+from src.signal_engine.cli import run_signal_engine
+
+def test_run_signal_engine_produces_five_new_charts(tmp_path):
+    tag = {
+        "company": "CATL", "stream": "perception", "source_weight": 1.0,
+        "date": "2025-06-01", "sentiment_score": 7.5, "direction": "positive",
+        "confidence": 0.8, "topic_cluster": "Capex_Execution", "geo_exposure": ["US"],
+        "globalization_model": "export-led", "localization_score": 8,
+        "subsidy_dependency": 3, "execution_quality": 9, "margin_signal": 7,
+        "capex_signal": 8, "ROIC_signal": 7, "contradiction_flag": False,
+        "contradiction_reason": None, "claim_summary": "CATL on track.", "key_quote": None,
+    }
+    tags_dir = tmp_path / "tags"
+    tags_dir.mkdir()
+    (tags_dir / "catl_test.json").write_text(json.dumps(tag))
+
+    out_dir = tmp_path / "charts"
+    out_dir.mkdir()
+
+    run_signal_engine(str(tags_dir), str(out_dir), human_inputs_path=None)
+
+    for fname in [
+        "differentiation_matrix.png",
+        "why_now_timeline.png",
+        "contradictions.png",
+        "risk_tree.png",
+        "evidence_scale.png",
+    ]:
+        assert (out_dir / fname).exists(), f"Missing: {fname}"

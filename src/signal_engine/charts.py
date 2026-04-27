@@ -136,6 +136,11 @@ def build_trend_inflection(sentiment_df: pd.DataFrame) -> go.Figure:
 
 
 def build_differentiation_matrix_chart(diff_df: pd.DataFrame, output_path: str) -> None:
+    if diff_df.empty:
+        go.Figure().update_layout(
+            title="Differentiation Matrix (no data)", width=900, height=500,
+        ).write_image(output_path)
+        return
     fig = go.Figure()
     fig.add_trace(go.Bar(
         name="CATL", x=diff_df["factor"], y=diff_df["CATL"],
