@@ -159,3 +159,37 @@ def test_build_risk_tree_chart_creates_file(tmp_path):
     out = str(tmp_path / "risk_tree.png")
     build_risk_tree_chart(df, out)
     assert pathlib.Path(out).exists()
+
+from src.signal_engine.aggregator import compute_evidence_attribution
+
+def _make_attribution_df():
+    return pd.DataFrame([
+        {"company": "CATL", "stream": "perception",   "confidence": 0.8},
+        {"company": "CATL", "stream": "ground_truth", "confidence": 0.9},
+        {"company": "CATL", "stream": "ground_truth", "confidence": 0.95},
+        {"company": "LGES", "stream": "perception",   "confidence": 0.7},
+        {"company": "LGES", "stream": "policy",       "confidence": 0.85},
+    ])
+
+def test_compute_evidence_attribution_columns():
+    df = compute_evidence_attribution(_make_attribution_df())
+    for col in ["company", "stream", "doc_count", "avg_confidence"]:
+        assert col in df.columns
+
+def test_compute_evidence_attribution_counts():
+    df = compute_evidence_attribution(_make_attribution_df())
+    catl_gt = df[(df["company"] == "CATL") & (df["stream"] == "ground_truth")]["doc_count"].values[0]
+    assert catl_gt == 2
+
+def test_compute_evidence_attribution_avg_confidence():
+    df = compute_evidence_attribution(_make_attribution_df())
+    catl_gt = df[(df["company"] == "CATL") & (df["stream"] == "ground_truth")]["avg_confidence"].values[0]
+    assert abs(catl_gt - 0.925) < 0.01
+
+from src.signal_engine.charts import build_evidence_scale_chart
+
+def test_build_evidence_scale_chart_creates_file(tmp_path):
+    df = compute_evidence_attribution(_make_attribution_df())
+    out = str(tmp_path / "evidence_scale.png")
+    build_evidence_scale_chart(df, out)
+    assert pathlib.Path(out).exists()

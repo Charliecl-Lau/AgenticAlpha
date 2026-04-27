@@ -145,3 +145,16 @@ def compute_risk_tree(df: pd.DataFrame) -> pd.DataFrame:
                 "impact": 0.7,
             })
     return pd.DataFrame(rows)
+
+
+def compute_evidence_attribution(df: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for (company, stream), group in df.groupby(["company", "stream"]):
+        avg_conf = round(float(group["confidence"].mean()), 3) if "confidence" in df.columns else None
+        rows.append({
+            "company": company,
+            "stream": stream,
+            "doc_count": len(group),
+            "avg_confidence": avg_conf,
+        })
+    return pd.DataFrame(rows)

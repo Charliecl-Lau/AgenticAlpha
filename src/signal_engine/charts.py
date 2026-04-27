@@ -247,3 +247,39 @@ def build_contradiction_chart(contradictions_df: pd.DataFrame, output_path: str)
         height=max(400, len(contradictions_df) * 60),
     )
     fig.write_image(output_path)
+
+
+def build_evidence_scale_chart(attribution_df: pd.DataFrame, output_path: str) -> None:
+    import plotly.graph_objects as go
+
+    if attribution_df.empty:
+        go.Figure().write_image(output_path)
+        return
+
+    colors = {
+        "perception": "#60A5FA",
+        "ground_truth": "#1D4ED8",
+        "policy": "#A78BFA",
+        "operations": "#34D399",
+    }
+
+    fig = go.Figure()
+    for stream, group in attribution_df.groupby("stream"):
+        fig.add_trace(go.Bar(
+            name=stream,
+            x=group["company"],
+            y=group["doc_count"],
+            marker_color=colors.get(stream, "grey"),
+            text=group["avg_confidence"].apply(lambda c: f"conf: {c:.0%}" if c else ""),
+            textposition="outside",
+        ))
+
+    fig.update_layout(
+        title="Evidence Attribution: Documents by Company and Stream",
+        barmode="stack",
+        yaxis_title="Document Count",
+        template="plotly_white",
+        width=800,
+        height=500,
+    )
+    fig.write_image(output_path)
