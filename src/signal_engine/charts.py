@@ -213,46 +213,121 @@ def build_why_now_timeline_chart(timeline_df: pd.DataFrame, output_path: str) ->
         .sort_values("quarter")
     )
 
+    _CANONICAL_QUARTERS = ["2025Q1", "2025Q2", "2025Q3", "2025Q4", "2026Q1", "2026Q2"]
+    quarters = [q for q in _CANONICAL_QUARTERS if q in agg["quarter"].unique()]
+
     fig = go.Figure()
     for company, color in [("CATL", _CATL_COLOR), ("LGES", _LGES_COLOR)]:
-        sub = agg[agg["company"] == company]
+        sub = (
+            agg[agg["company"] == company]
+            .set_index("quarter")
+            .reindex(quarters)
+            .reset_index()
+            .fillna(0)
+        )
+        counts = sub["mention_count"].astype(int).tolist()
         fig.add_trace(go.Scatter(
             x=sub["quarter"],
-            y=sub["mention_count"],
-            mode="lines+markers",
+            y=counts,
+            mode="lines+markers+text",
             name=company,
-            line=dict(color=color, width=2),
-            marker=dict(size=8),
+            line=dict(color=color, width=3.5),
+            marker=dict(
+                size=[18 if v > 0 else 9 for v in counts],
+                color=color,
+                line=dict(width=2.5, color="white"),
+            ),
+            text=[str(v) if v > 0 else "" for v in counts],
+            textposition="middle right",
+            textfont=dict(size=13, color=color, family="Arial Black"),
         ))
 
-    _KEY_EVENTS = [
-        ("2025Q1", "LGES IRA credits<br>exceed operating profit"),
-        ("2025Q2", "CATL Hungary 50 GWh<br>run-rate achieved"),
+    max_y = int(agg["mention_count"].max()) if not agg.empty else 10
+    y_ceil = max_y + max(6, int(max_y * 0.35))
+
+    # Milestone guide lines — only on quarters with real data
+    _MILESTONES = [
+        ("2025Q1", "LGES IRA credits<br>exceed op. profit"),
+        ("2025Q2", "CATL Hungary<br>50 GWh run-rate"),
     ]
-    quarters = sorted(agg["quarter"].unique().tolist())
-    max_y = int(agg["mention_count"].max()) + 2 if not agg.empty else 10
-    for q, label in _KEY_EVENTS:
-        if q in quarters:
-            fig.add_vline(x=q, line_dash="dot", line_color="grey", line_width=1)
+    data_quarters = set(agg[agg["mention_count"] > 0]["quarter"].tolist())
+    for q, label in _MILESTONES:
+        if q in data_quarters:
+            fig.add_vline(x=q, line_dash="dot", line_color="#94A3B8", line_width=1.5)
             fig.add_annotation(
-                x=q, y=max_y, text=label,
-                showarrow=False, font=dict(size=10, color="grey"),
+                x=q, y=y_ceil, text=label,
+                showarrow=False, font=dict(size=10, color="#64748B"),
                 yanchor="top", align="center",
+            )
+
+    # Red dashed inflection line at 2026Q2
+    _INFLECTION_Q = "2026Q2"
+    if _INFLECTION_Q in quarters:
+        fig.add_vline(x=_INFLECTION_Q, line_dash="dash", line_color="#DC2626", line_width=2.5)
+
+        # Top badge
+        fig.add_annotation(
+            x=_INFLECTION_Q, y=y_ceil,
+            text="<b>◀ Inflection Point</b>",
+            showarrow=False,
+            font=dict(size=12, color="#DC2626"),
+            yanchor="top", xanchor="left",
+            xshift=8,
+            bgcolor="rgba(255,255,255,0.9)",
+            bordercolor="#DC2626",
+            borderwidth=1.5,
+            borderpad=6,
+        )
+
+        # Narrative callout — paper coords so it never overlaps data
+        fig.add_annotation(
+            xref="paper", yref="paper",
+            x=0.62, y=0.52,
+            text=(
+                "<b>Coverage diverged sharply in Q2 2026</b><br><br>"
+                "<b style='color:#1a56db'>CATL:</b> Strong momentum on execution milestones<br>"
+                "         and overseas margin realization (Hungary ramp)<br><br>"
+                "<b style='color:#e02424'>LGES:</b> Coverage dominated by subsidy dependence<br>"
+                "         and Q1 2026 operating loss concerns"
+            ),
+            showarrow=False,
+            font=dict(size=11, color="#1E293B"),
+            align="left",
+            bgcolor="rgba(255,255,255,0.93)",
+            bordercolor="#DC2626",
+            borderwidth=1.5,
+            borderpad=12,
+        )
+
+        # Inline label on CATL line near 2026Q2
+        catl_row = agg[(agg["company"] == "CATL") & (agg["quarter"] == _INFLECTION_Q)]
+        if not catl_row.empty and int(catl_row["mention_count"].iloc[0]) > 0:
+            fig.add_annotation(
+                x=_INFLECTION_Q,
+                y=int(catl_row["mention_count"].iloc[0]),
+                text="  Execution &amp; margin<br>  narrative surge →",
+                showarrow=False,
+                font=dict(size=10, color=_CATL_COLOR),
+                xanchor="right",
+                yanchor="middle",
+                xshift=-10,
             )
 
     fig.update_layout(
         title=(
-            "Why Now: AI Coverage Intensity by Quarter<br>"
-            "<sub>Divergence in coverage momentum reflects shifting execution and subsidy narratives in 2025–26.</sub>"
+            "Why Now: Divergence in Coverage Momentum (2025–2026)<br>"
+            "<sub>CATL coverage intensity surged in Q2 2026 as execution and margin realization narratives "
+            "strengthened, while LGES coverage remained focused on subsidy dependence and loss-related topics.</sub>"
         ),
-        xaxis_title="Quarter",
-        yaxis_title="Total Mentions",
+        xaxis=dict(title="Quarter", categoryorder="array", categoryarray=quarters),
+        yaxis=dict(title="Total Mentions", rangemode="tozero", range=[0, y_ceil]),
         template="plotly_white",
         font=dict(size=13),
-        legend_title="Company",
-        margin=dict(b=60, t=120),
-        width=1000,
-        height=500,
+        legend=dict(title="Company", x=0.01, y=0.99, bgcolor="rgba(255,255,255,0.85)",
+                    bordercolor="#E5E7EB", borderwidth=1),
+        margin=dict(b=80, t=130, r=40),
+        width=1100,
+        height=650,
     )
     fig.write_image(output_path)
 
@@ -323,33 +398,75 @@ def build_risk_tree_chart(risk_df: pd.DataFrame, output_path: str) -> None:
 
 
 def build_contradiction_chart(contradictions_df: pd.DataFrame, output_path: str) -> None:
-    import plotly.graph_objects as go
-
     if contradictions_df.empty:
         go.Figure().update_layout(
             title="Contradiction Scanner (no contradictions identified)", width=900, height=300,
         ).write_image(output_path)
         return
 
-    fig = go.Figure()
-    colors = {"CATL": _CATL_COLOR, "LGES": _LGES_COLOR}
-    for company, sub in contradictions_df.groupby("company"):
-        fig.add_trace(go.Scatter(
-            x=sub["sentiment_score"],
-            y=sub["claim_summary"].str[:60],
-            mode="markers+text",
-            name=company,
-            marker=dict(size=14, color=colors.get(company, "grey")),
-            text=sub["contradiction_reason"].str[:40],
-            textposition="top center",
-        ))
+    df = contradictions_df.copy()
+    df["score_str"] = df["sentiment_score"].map(lambda x: f"{x:.1f}")
+    # Truncate long text so it fits table columns cleanly
+    df["claim_col"] = df["claim_summary"].str[:90]
+    df["reason_col"] = df["contradiction_reason"].str[:100]
+    df["company_col"] = df["company"]
+
+    n_rows = len(df)
+    # Alternating row fill; highlight low-sentiment rows (bearish) in amber
+    def row_color(score):
+        if score <= 3.5:
+            return "#FCA5A5"
+        if score <= 5.0:
+            return "#FDE68A"
+        return "#F9FAFB"
+
+    row_fills = [row_color(s) for s in df["sentiment_score"]]
+
+    header_color = "#1E3A5F"
+    fig = go.Figure(go.Table(
+        columnwidth=[60, 260, 80, 280],
+        header=dict(
+            values=[
+                "<b>Company</b>",
+                "<b>Claim / Statement</b>",
+                "<b>Sentiment Score</b>",
+                "<b>Why It Challenges the Bull Case</b>",
+            ],
+            fill_color=header_color,
+            font=dict(color="white", size=12),
+            align="left",
+            height=36,
+        ),
+        cells=dict(
+            values=[
+                df["company_col"].tolist(),
+                df["claim_col"].tolist(),
+                df["score_str"].tolist(),
+                df["reason_col"].tolist(),
+            ],
+            fill_color=[
+                row_fills,
+                row_fills,
+                row_fills,
+                row_fills,
+            ],
+            font=dict(size=11),
+            align="left",
+            height=38,
+        ),
+    ))
 
     fig.update_layout(
-        title="Contradiction Scanner: Evidence Challenging Bull Thesis",
-        xaxis=dict(title="Sentiment Score (lower = more bearish)", range=[0, 10]),
+        title=(
+            "Contradiction Scanner: Key Evidence Challenging Bullish Narratives on LGES<br>"
+            "<sub>Lower sentiment score = more bearish signal. "
+            "Red rows ≤ 3.5, amber rows ≤ 5.0.</sub>"
+        ),
         template="plotly_white",
-        width=1000,
-        height=max(400, len(contradictions_df) * 60),
+        font=dict(size=12),
+        margin=dict(l=20, r=20, t=110, b=20),
+        width=960,
+        height=max(320, 110 + n_rows * 44),
     )
     fig.write_image(output_path)
 

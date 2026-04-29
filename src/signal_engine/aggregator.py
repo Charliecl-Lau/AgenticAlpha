@@ -87,6 +87,10 @@ def compute_differentiation_matrix(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+_TIMELINE_QUARTERS = ["2025Q1", "2025Q2", "2025Q3", "2025Q4", "2026Q1", "2026Q2"]
+_TIMELINE_COMPANIES = ["CATL", "LGES"]
+
+
 def compute_timeline(df: pd.DataFrame) -> pd.DataFrame:
     if "date" not in df.columns:
         return pd.DataFrame(columns=["quarter", "company", "topic", "mention_count"])
@@ -109,7 +113,21 @@ def compute_timeline(df: pd.DataFrame) -> pd.DataFrame:
             if contra > 0:
                 rows.append({"quarter": quarter, "company": company, "topic": "contradiction", "mention_count": contra})
 
-    return pd.DataFrame(rows)
+    result = pd.DataFrame(rows)
+
+    # Ensure every canonical quarter × company combination is present so the
+    # chart always renders a full 2025Q1–2026Q2 timeline even with sparse data.
+    scaffold_rows = []
+    present = set(zip(result["quarter"], result["company"])) if not result.empty else set()
+    for q in _TIMELINE_QUARTERS:
+        for company in _TIMELINE_COMPANIES:
+            if (q, company) not in present:
+                scaffold_rows.append({"quarter": q, "company": company,
+                                      "topic": "general", "mention_count": 0})
+    if scaffold_rows:
+        result = pd.concat([result, pd.DataFrame(scaffold_rows)], ignore_index=True)
+
+    return result
 
 
 def compute_contradictions(df: pd.DataFrame) -> pd.DataFrame:
