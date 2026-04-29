@@ -7,6 +7,7 @@ class UrlEntry(BaseModel):
     company: str
     source: Optional[str] = None
     region: Optional[str] = None
+    new: Optional[bool] = None
 
     @field_validator("url")
     @classmethod
@@ -35,8 +36,16 @@ class UrlConfig(BaseModel):
         return out
 
 
-def load_url_config(path: str) -> UrlConfig:
+def load_url_config(path: str, new_only: bool = False) -> UrlConfig:
     import yaml
     with open(path, encoding="utf-8") as f:
         data = yaml.safe_load(f) or {}
-    return UrlConfig(**data)
+    config = UrlConfig(**data)
+    if new_only:
+        config = UrlConfig(
+            perception=[e for e in config.perception if e.new],
+            ground_truth=[e for e in config.ground_truth if e.new],
+            policy=[e for e in config.policy if e.new],
+            operations=[e for e in config.operations if e.new],
+        )
+    return config

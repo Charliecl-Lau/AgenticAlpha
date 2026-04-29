@@ -11,8 +11,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Ingest news and IR documents into Markdown")
     parser.add_argument("--config", default="config/urls.yaml")
     parser.add_argument("--output", default="data/raw")
+    parser.add_argument("--new-only", action="store_true", help="Only ingest URLs tagged new: true")
     args = parser.parse_args()
-    config = load_url_config(args.config)
+    config = load_url_config(args.config, new_only=args.new_only)
     stats = run_ingestion(config, output_dir=args.output)
     print(
         f"Ingestion complete: {stats['succeeded']}/{stats['total']} succeeded, "

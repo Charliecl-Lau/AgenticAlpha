@@ -168,6 +168,82 @@ perception:
     company: "CATL"
     new: true
     # Battery-tech: CATL 2025 annual revenue ¥423.7B +17%, net profit ¥72.2B +42%, R&D ¥22.1B
+  - url: "https://portersfiveforce.com/blogs/growth-strategy/catl"
+    company: "CATL"
+    new: true
+    # Porters Five Force: CATL growth strategy — Debrecen 100 GWh phased ramp 2025-2027, capex execution, European OEM supply
+  - url: "https://www.electrive.com/2025/12/05/hungarian-catl-factory-to-open-in-spring/"
+    company: "CATL"
+    new: true
+    # Electrive: CATL Debrecen serial production March/April 2026, module assembly already underway (30k+ modules), local workforce ramp
+  - url: "https://ceenergynews.com/renewables/when-production-start-catl-debrecen/"
+    company: "CATL"
+    new: true
+    # CE Energy News: CATL Debrecen cell production early 2026, 40 GWh initial capacity 100% booked, long-term EU localization
+  - url: "https://newseu.cgtn.com/news/2026-01-25/China-s-CATL-battery-plant-reshapes-job-market-in-Hungary-s-Debrecen-1Kcn7TPvRZe/p.html"
+    company: "CATL"
+    new: true
+    # CGTN: CATL Debrecen plant reshaping Hungarian job market, ~1,400 employees targeted Q1 2026, blue-collar hiring focus
+  - url: "https://autonews.gasgoo.com/articles/news/catl-scores-robust-yoy-growth-in-2025-revenue-net-profit-2031360974844448769"
+    company: "CATL"
+    new: true
+    # Gasgoo: CATL 2025 annual report — Hungary/Indonesia projects progressing, 39.2% global share, overseas revenue contribution
+
+  # CATL — Subsidies, policy shifts, and globalization context (2024-2026)
+  - url: "https://www.carscoops.com/2025/05/catl-got-over-500-million-in-state-subsidies-last-year/"
+    company: "CATL"
+    new: true
+    # CarScoops: CATL top subsidy recipient in H1 2024 (~$532M), exceeding peers' full-year figures, 2023-2024 trends
+  - url: "https://worldtradescanner.com/China%20Battery%20Co%20CATL%20Top%20Subsidy%20Recipient.htm"
+    company: "CATL"
+    new: true
+    # World Trade Scanner: CATL #1 subsidy recipient among mainland listed firms, 2023 details (~$790M) and strategic context
+  - url: "https://www.reuters.com/business/autos-transportation/china-signals-it-will-pull-plug-subsidies-evs-with-five-year-plan-exclusion-2025-10-29/"
+    company: "CATL"
+    new: true
+    # Reuters: China excludes NEVs from 2026-2030 strategic industries plan, signaling subsidy phase-out amid oversupply
+  - url: "https://cnevpost.com/2025/12/30/china-to-continue-trade-in-subsidies-2026-auto-consumption/"
+    company: "CATL"
+    new: true
+    # CnEVPost: China extends/adjusts 2026 trade-in subsidies (percentage-based, mid-high end focus), indirect CATL demand impact
+  - url: "https://www.intellinews.com/hungary-channels-close-to-4bn-in-subsidies-to-ev-battery-industry-377434/"
+    company: "CATL"
+    new: true
+    # IntelliNews: Hungary ~€3.8-4B battery sector subsidies/infrastructure (incl. CATL Debrecen context), 2025 updates
+  - url: "https://sccei.fsi.stanford.edu/china-briefs/its-not-just-subsidies-how-chinas-ev-battery-firms-learned-their-way-dominance"
+    company: "CATL"
+    new: true
+    # Stanford SCCEI: Historical role of subsidies and domestic content rules in CATL/BYD rise; learning-by-doing beyond policy
+
+  # CATL — AI in battery R&D, manufacturing, and WEF MINDS Award (2025-2026)
+  - url: "https://www.batteriesinternational.com/news/catl-secures-davos-honour-for-ai-powered-battery-rd/"
+    company: "CATL"
+    new: true
+    # Batteries International: CATL secures WEF Davos award for AI-powered battery R&D and next-gen lithium-ion design (Jan 2026)
+  - url: "https://battery-tech.net/battery-markets-news/catl-wins-2026-wef-minds-award-for-ai-battery-design/"
+    company: "CATL"
+    new: true
+    # Battery-Tech: CATL WEF 2026 MINDS Award — AI co-design platform with physics-informed modeling and ML for faster lithium-ion development
+  - url: "https://www.automotiveworld.com/news/catl-wins-wef-award-for-ai-battery-design-system/"
+    company: "CATL"
+    new: true
+    # Automotive World: CATL wins WEF award for AI-powered battery cell design platform using 50M+ data records and 600TB test data (Jan 2026)
+  - url: "https://www.imd.org/entity-profile/contemporary-amperex-technology-ai-maturity-2025/"
+    company: "CATL"
+    new: true
+    # IMD: CATL AI maturity 2025 — scaled AI in R&D (materials discovery), manufacturing (digital twins), TENER SmartStorage with AI O&M
+  - url: "https://www.chinadaily.com.cn/a/202603/04/WS69a7dce8a310d6866eb3ba1f.html"
+    company: "CATL"
+    new: true
+    # China Daily: CATL to increase R&D investment with more AI-driven approaches in operations and products (Mar 2026)
+  - url: "https://www.indexbox.io/blog/catl-chairman-announces-rd-investment-surge-and-global-expansion-plans/"
+    company: "CATL"
+    new: true
+    # IndexBox: CATL Chairman announces R&D spending surge and greater use of AI for global market expansion (Mar 2026)
+  - url: "https://carboncredits.com/catls-profit-surges-42-with-global-battery-demand-and-the-shift-to-a-zero-carbon-future/"
+    company: "CATL"
+    new: true
+    # Carbon Credits: CATL 2025 results — AI integration in research/manufacturing, battery storage powering AI data centers
 
   # LGES — Additional media coverage (Q1 2026 loss, IRA risk, Reuters)
   - url: "https://www.investing.com/news/stock-market-news/lg-energy-solution-flags-q1-operating-loss-on-weak-ev-demand-4599746"
@@ -240,6 +316,44 @@ perception:
     company: "LGES"
     new: true
     # Ground News: LGES warns 2026 EV slowdown from US tariffs and IRA end Sep 2025, ESS pivot, subsidy reliance
+  - url: "https://en.yna.co.kr/view/AEN20260407006900320"
+    company: "LGES"
+    new: true
+    # Yonhap: LGES Q1 2026 operating loss ₩207.8B (vs prior profit), sales down, IRA subsidy details
+  - url: "https://koreajoongangdaily.joins.com/news/2026-04-07/business/industry/LG-Energy-Solution-expects-to-post-operating-loss-in-Q1-due-to-fallout-from-Iran-war/2563232"
+    company: "LGES"
+    new: true
+    # Korea JoongAng Daily: LGES Q1 loss tied to EV demand fallout, IRA credits insufficient to offset weakness
+  - url: "https://www.cbtnews.com/lg-energy-swings-to-deeper-loss/"
+    company: "LGES"
+    new: true
+    # CBT News: LGES deeper Q1 loss as EV slowdown undercuts earnings, pivot to ESS for margins
+
+  # LGES — AI transformation (AX), productivity, ESS for AI infrastructure (2024-2026)
+  - url: "https://www.koreaherald.com/article/10716093"
+    company: "LGES"
+    new: true
+    # Korea Herald: LGES CEO eyes 50% productivity boost by 2028 through AI transformation (AX) initiative (Apr 2026)
+  - url: "https://www.mk.co.kr/en/business/12015637"
+    company: "LGES"
+    new: true
+    # MK: LGES vows 50% productivity gain by 2028 via AX, CEO-led AI Governance Committee (Apr 2026)
+  - url: "https://www.koreatimes.co.kr/business/tech-science/20260413/lg-energy-solution-raises-stakes-on-ai-push-targets-50-productivity-gain-by-2028"
+    company: "LGES"
+    new: true
+    # Korea Times: LGES raises stakes on AI push (AX) to claw back in global battery market, enterprise AI platform (Apr 2026)
+  - url: "https://en.yna.co.kr/view/AEN20260413003300320"
+    company: "LGES"
+    new: true
+    # Yonhap: LG Energy targets 50% productivity gain by 2028 on AI push, company-wide AX strategy (Apr 2026)
+  - url: "https://www.thelec.net/news/articleView.html?idxno=6513"
+    company: "LGES"
+    new: true
+    # The Elec: LGES raises productivity target via AI transformation across product development, materials, and manufacturing (Apr 2026)
+  - url: "https://news.lgensol.com/tag/ai/"
+    company: "LGES"
+    new: true
+    # LGES news tag AI — collection of articles on AI in design, ESS for AI data centers, robotics, and battery management
 
 ground_truth:
   # CATL — Official company IR and news pages
@@ -289,6 +403,10 @@ ground_truth:
     company: "CATL"
     new: true
     # CATL 2025 A-Share Annual Report summary and board work report on HKEX (Mar 2026)
+  - url: "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0311/2026031100770.pdf"
+    company: "CATL"
+    new: true
+    # HKEX: CATL 2025 Annual Report full H-Share version, globalization/MDA section on overseas ops (Mar 2026)
   - url: "https://www.catl.com/en/uploads/1/file/public/202603/20260331135628_dciihbv1qr.pdf"
     company: "CATL"
     new: true
@@ -343,9 +461,21 @@ ground_truth:
   - url: "https://news.lgensol.com/company-news/supplementary-stories/3868/"
     company: "LGES"
     # LGES supplementary story 3868
+  - url: "https://news.lgensol.com/company-news/supplementary-stories/4686/"
+    company: "LGES"
+    new: true
+    # LGES official: ESS and AI-based energy management for AI-era power infrastructure / EaaS strategy (Feb 2026)
+  - url: "https://news.lgensol.com/company-news/supplementary-stories/3134/"
+    company: "LGES"
+    new: true
+    # LGES official: AI solution reduces battery cell design process to one day (official tech showcase)
   - url: "https://www.lgcorp.com/media/release/28617"
     company: "LGES"
     # LG Corp media release 28617
+  - url: "https://www.lgcorp.com/media/release/29814"
+    company: "LGES"
+    new: true
+    # LG Corp: LGES 2025 financial results press release (revenue ₩23.7T, op profit ₩1.3T, 2026 initiatives)
   - url: "https://www.lgcorp.com/media/release/29824"
     company: "LGES"
     new: true
@@ -372,6 +502,10 @@ ground_truth:
   - url: "https://www.lgensol.com/en/investors/earnings-announcement"
     company: "LGES"
     # LGES official earnings announcement page
+  - url: "https://www.lgensol.com/en/investors/investors-activity"
+    company: "LGES"
+    new: true
+    # LGES IR Events page — earnings calls, conferences, presentation archive for 2025-2026
   - url: "https://www.lgensol.com/en/investors/earnings-release"
     company: "LGES"
     # LGES earnings release archive

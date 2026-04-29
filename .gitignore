@@ -1,6 +1,9 @@
 # Secrets
 .env
 
+# Scratch / research notes (may contain pre-signed URLs with embedded credentials)
+urls.md
+
 # Generated data — ingestion, tagging, synthesis outputs
 data/raw/
 data/processed/
